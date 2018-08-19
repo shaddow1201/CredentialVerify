@@ -34,7 +34,7 @@ contract TestApplicantFactory {
     */
     function testSelectValidApplicantByOrgAndPosition() public {
         string memory SSN;                 // Applicant SSN
-        (, SSN, , , ) = applicantFactory.selectApplicantByOrgAndPosition(address(this), 0);
+        (, SSN, , , ) = applicantFactory.selectApplicantByOrgAndPosition(account0, 0);
         string memory expected = "987654321";
 
         Assert.equal(SSN, expected, "Valid Applicant Lookup Successful.");
@@ -54,7 +54,7 @@ contract TestApplicantFactory {
     */
     function testSelectInValidApplicantByOrgAndPosition() public {
         address studentAddress;     // address of student requesting credential
-        (studentAddress, , , , ) = applicantFactory.selectApplicantByOrgAndPosition(address(this), 5);
+        (studentAddress, , , , ) = applicantFactory.selectApplicantByOrgAndPosition(account0, 9);
         address expected = 0;
 
         Assert.equal(studentAddress, expected, "InValid Applicant Lookup failed appropriately. (returned 0)");

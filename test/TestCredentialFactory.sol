@@ -10,6 +10,7 @@ import "../contracts/CredentialFactory.sol";
 
 contract TestCredentialFactory {
     CredentialFactory credentialFactory = CredentialFactory(DeployedAddresses.CredentialFactory());
+    CredentialFactory credentialFactoryB = new CredentialFactory();
 
     address account0 = 0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB;
 
@@ -28,10 +29,11 @@ contract TestCredentialFactory {
     * @dev Checks Valid CredentialOrg Credential Count, checks if inital conditions are correct from migration.
     */
     function testSelectValidOrgCredentialCount() public {
+
         address contractOwner = credentialFactory.getOwner();
         uint256 testVal = uint256(credentialFactory.selectOrgCredentialCount(contractOwner));
-        uint256 expected = 1;
-        Assert.equal(testVal, expected, "Expected Credential Count (1)");
+        uint256 expected = 4;
+        Assert.equal(testVal, expected, "Expected Credential Count (4)");
     }
 
     /**
@@ -60,7 +62,7 @@ contract TestCredentialFactory {
     * @dev Tests to see if Credential Records can be inserted. (anyone can insert, but you can only create records for YOU.)
     */
     function testInsertCredentialRecord() public {
-        bool insertSuccess = credentialFactory.createCredential("ANOTHERREC", "AAAA", "AAAAAA");
+        bool insertSuccess = credentialFactoryB.createCredential("ANOTHERREC", "AAAA", "AAAAAA", address(this));
 
         Assert.isTrue(insertSuccess, "Credential Record Creation Test Expected (True)");
     }
@@ -71,7 +73,7 @@ contract TestCredentialFactory {
     function testSelectCredentialInsertedRecord() public {
         string memory credentialLevel;
 
-        (credentialLevel, , ) = credentialFactory.selectCredential(address(this), 0);
+        (credentialLevel, , ) = credentialFactoryB.selectCredential(address(this), 0);
         string memory expected = "ANOTHERREC";
 
         Assert.equal(credentialLevel,expected,"Credential Division Matches Expected (ANOTHERREC)");

@@ -25,12 +25,12 @@ contract TestCredentialOrgFactory {
     }
 
     /**
-    * @dev Tests to see if INIT record was created upon deploy.  Data existence check.
+    * @dev Tests to see if INIT records were created upon deploy.  Data existence check.
     */
     function testSelectCredentialOrgCount() public {
 
         uint256 orgCount = uint256(credentialOrgFactoryA.selectOrgCount());
-        uint256 expected = 5;
+        uint256 expected = 4;
 
         Assert.equal(orgCount, expected, "Select of CredentialOrg Count.");
     }

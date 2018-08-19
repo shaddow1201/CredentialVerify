@@ -135,7 +135,8 @@ class App extends Component {
               //return credentialOrgFactoryInstance.selectCredentialOrgByAddress(this.state.accountCheckSummed)
               return credentialOrgFactoryInstance.selectCredentialOrgByAddress(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
             }).then ((result) => {
-              alert(result)    
+              alert(result)   
+              //alert(result) 
               //var tmpArray = result.split(",")
               this.setState({testHolder: result})   
               //alert(this.state.testHolder);
@@ -164,9 +165,6 @@ class App extends Component {
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
     const account = this.state.account
 
-    //alert(account);
-    //alert(this.state.web3.toChecksumAddress(account));
-    //alert(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
     //credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", account)
     //credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", this.state.web3.toChecksumAddress(account))
     var test = this.state.web3.toChecksumAddress(account)
