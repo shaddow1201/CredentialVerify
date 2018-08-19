@@ -17,13 +17,18 @@ class App extends Component {
     this.state = {
       storageValue: 0,
       web3: null,
-      contract: null,
       account: null,
       credentialOrgCount: null,
+      credentialCount: null,
       isCredentialOrg : null,
       shortName : null,
       schoolAddress : 0,
-      detail : null
+      detail : null,
+      applicantZCount: null,
+      credentialOrgFactoryContract: null,
+      credentialFactoryContract: null,
+      applicantFactoryContract: null,
+      processApplicantContract: null
     }
   }
 
@@ -70,7 +75,7 @@ class App extends Component {
       credentialOrgFactory.deployed().then((instance) => {
         credentialOrgFactoryInstance = instance;
         // set the state of the contract
-        this.setState({ contract: credentialOrgFactoryInstance, account: accounts[0]}, this.credentialOrgFactoryDetail);
+        this.setState({ credentialOrgFactoryContract: credentialOrgFactoryInstance}, this.credentialOrgFactoryDetail);
         var credentialOrgFactoryEvent = credentialOrgFactoryInstance.CredentialOrgEvent({schoolAddress: this.state.schoolAddress});
         credentialOrgFactoryEvent.watch(function(err, result) {
           console.log("result.args");
@@ -90,30 +95,40 @@ class App extends Component {
         credentialFactory.deployed().then((instance) => {
           credentialFactoryInstance = instance;
           // set the state of the contract
-          this.setState({ contract: credentialFactoryInstance, account: accounts[0]}, this.credentialFactoryDetail);
+          this.setState({ credentialFactoryContract: credentialFactoryInstance, account: accounts[0]}, this.credentialFactoryDetail);
   
         }).then((result) => {
           //console.log(result);
           applicantFactory.deployed().then((instance) => {
             applicantFactoryInstance = instance;
             // set the state of the contract
-            this.setState({ contract: applicantFactoryInstance, account: accounts[0]}, this.applicantFactoryDetail);
+            this.setState({ applicantFactoryContract: applicantFactoryInstance}, this.applicantFactoryDetail);
   
           }).then((result) =>{
             //console.log(result);
             processApplicants.deployed().then((instance) => {
-              processApplicantsInstance = instance;
+              processApplicantsInstance = instance; 
               // set the state of the contract
-              this.setState({ contract: processApplicantsInstance, account: accounts[0]}, this.processApplicantsDetail);
-              return credentialOrgFactoryInstance.isCredentialOrg(accounts[0]);
+              this.setState({ processApplicantsContract: processApplicantsInstance}, this.processApplicantsDetail);
+              // if use accounts[0] it fails. why?
+              //return credentialOrgFactoryInstance.isCredentialOrg(this.state.account);
+              return credentialOrgFactoryInstance.isCredentialOrg(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB);
             }).then((result) => {
               // Update state with the result.
-              console.log(result);
-              if (result){
-                return this.setState({ isCredentialOrg: "true"})
+              if (result){ 
+                this.setState({ isCredentialOrg: "true" })
               } else {
-                return this.setState({ isCredentialOrg: "false"})
+                this.setState({ isCredentialOrg: "false"})
               }
+              return credentialFactoryInstance.selectOrgCredentialCount(this.state.account) 
+              //return credentialFactoryInstance.selectOrgCredentialCount(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB) 
+            }).then ((result) => {
+              this.setState({ credentialCount: result.c[0]})
+              //return applicantFactoryInstance.selectOrgApplicantCount(this.state.account)
+              return applicantFactoryInstance.selectOrgApplicantCount(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
+            }).then ((result) => {
+              //alert(result.c[0])
+              return this.setState({applicantCount: result.c[0]})
             })
           })
         })
@@ -134,28 +149,17 @@ class App extends Component {
     console.log("Log Event: set ProcessApplicants Contract State");
   }
 
-
-
-  handleClick(event){
-    const contract = this.state.contract
-    const account = this.state.account
+  Check(event){
+    //const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
+    //const account = this.state.account
     
-    contract.isCredentialOrg(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
-    //contract.isCredentialOrg(account.toString())
-    .then(result => {
-
-      alert(result);
-      if (!result){
-        //contract.createCredentialOrg("Test", "Test", account) 
-        alert(account);        
-        return this.setState({isCredentialOrg: "false" })
-      } else {
-        return this.setState({isCredentialOrg: "true" })
-      }
-      
-    })
-
+    //credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", "0x839c18df17236382f8832d9Ab5ef3FaCAFBAC891" )
+    //.then(result => {
+    //  alert(result);
+    //  //return this.setState({applicantCount: result.c[0]})
+    //})
   }
+
 
   render() {
     return (
@@ -170,8 +174,10 @@ class App extends Component {
               <h1>Welcome to Credential Verify!</h1>
 
               <p>CurrentAccount isCredentialOrg: {this.state.isCredentialOrg}</p>
+              <p>Credential Count: {this.state.credentialCount}</p>
+              <p>CredentialOrg Applicant Count: {this.state.applicantCount}</p>
 
-              <button onClick={this.handleClick.bind(this)}>CredentialOrg?</button>
+              <button onClick={this.Check.bind(this)}>CredentialOrg?</button>
             </div>
           </div>
         </main>
