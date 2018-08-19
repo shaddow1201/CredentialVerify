@@ -29,7 +29,8 @@ class App extends Component {
       credentialOrgFactoryContract: null,
       credentialFactoryContract: null,
       applicantFactoryContract: null,
-      processApplicantContract: null
+      processApplicantContract: null,
+      testHolder: null
     }
   }
 
@@ -73,7 +74,9 @@ class App extends Component {
     
     // Get accounts.
     this.state.web3.eth.getAccounts((error, accounts) => {
+      //this.state.web3.eth.defaultAccount = accounts[0];
       credentialOrgFactory.deployed().then((instance) => {
+        //this.state.web3.eth.defaultAccount = this.state.web3.eth.accounts[0];
         credentialOrgFactoryInstance = instance;
         // set the state of the contract
         this.setState({ credentialOrgFactoryContract: credentialOrgFactoryInstance}, this.credentialOrgFactoryDetail);
@@ -109,8 +112,8 @@ class App extends Component {
               processApplicantsInstance = instance; 
               // set the state of the contract
               this.setState({ processApplicantsContract: processApplicantsInstance}, this.processApplicantsDetail);
-              //return credentialOrgFactoryInstance.isCredentialOrg(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB);
-              return credentialOrgFactoryInstance.isCredentialOrg(this.state.accountCheckSummed);
+              return credentialOrgFactoryInstance.isCredentialOrg(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB);
+              //return credentialOrgFactoryInstance.isCredentialOrg(this.state.account);
             }).then((result) => {
               // Update state with the result.
               if (result){ 
@@ -126,7 +129,16 @@ class App extends Component {
               return applicantFactoryInstance.selectOrgApplicantCount(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
             }).then ((result) => {
               //alert(result.c[0])
-              return this.setState({applicantCount: result.c[0]})
+              this.setState({applicantCount: result.c[0]})
+              //return credentialOrgFactoryInstance.selectCredentialOrgByAddress(this.state.account)
+              //return credentialOrgFactoryInstance.selectCredentialOrgByAddress(this.state.accountCheckSummed)
+              return credentialOrgFactoryInstance.selectCredentialOrgByAddress(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
+            }).then ((result) => {
+              alert(result)    
+              //var tmpArray = result.split(",")
+              this.setState({testHolder: result})   
+              //alert(this.state.testHolder);
+
             })
           })
         })
