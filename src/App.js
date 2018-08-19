@@ -30,9 +30,9 @@ class App extends Component {
       credentialFactoryContract: null,
       applicantFactoryContract: null,
       processApplicantContract: null,
-      createCredentialOrgShortName: null,
-      createCredentialOrgOfficialSchoolName: null,
-      createCredentialOrgSchoolAddress: null
+      createCredentialOrgShortName: "",
+      createCredentialOrgOfficialSchoolName: "",
+      createCredentialOrgSchoolAddress: ""
     }
   }
 
@@ -172,7 +172,7 @@ class App extends Component {
   }
 
   createOrgShortNameChange(event){
-    alert("change detected");
+    //alert("change detected");
     this.setState({createCredentialOrgShortName: event.target.value});
   }
   createOrgOfficialNameChange(event){
