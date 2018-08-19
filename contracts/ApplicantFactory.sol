@@ -46,13 +46,15 @@ contract ApplicantFactory is Pausable {
     // address of CredentialOrgFactory.
     address private credentialOrgContractAddress;
 
+    CredentialOrgFactory cof;
+
     // modifiers
     /**
     * @dev Modifer onlyBy for Access Control
     */
     modifier onlyBy(address _credentialOrgAddress){
         uint32 foundAccount = 0;
-        CredentialOrgFactory cof = CredentialOrgFactory(credentialOrgContractAddress);
+        cof = CredentialOrgFactory(credentialOrgContractAddress);
         if (cof.isCredentialOrg(msg.sender)){
             foundAccount = 1;
         }
@@ -102,16 +104,20 @@ contract ApplicantFactory is Pausable {
         require(bytes(_collegeStudentID).length == 9, "createApplicant (FAIL)College StudentID length Problem");
         require(bytes(_firstName).length > 0 && bytes(_firstName).length <= 40, "createApplicant (FAIL) FirstName length problem"); 
         require(bytes(_lastName).length > 0 && bytes(_lastName).length <= 40, "createApplicant (FAIL) LastName length problem"); 
-        //require(applicantAddressToApplicantPosition[msg.sender] > 0 || msg.sender == owner, "createApplicant (FAIL) only one application per address");
-        insertSuccess = false;
-        uint32 position = uint32(orgAddressToApplicants[_collegeAddress].push(Applicant(msg.sender, _SSN, _collegeStudentID, _firstName, _lastName, uint32(block.timestamp), 0, "")));
-        if(position >= 0){
-            insertSuccess = true;
-            applicantAddressToApplicantPosition[msg.sender] = position.sub(1);
-            orgAddressToApplicantCount[_collegeAddress] = orgAddressToApplicantCount[_collegeAddress].add(1);
-            emit CreateNewApplicant(msg.sender, 0, "createApplicant (SUCCESS)");
+        cof = CredentialOrgFactory(credentialOrgContractAddress);
+        if (msg.sender == address(this) || cof.isCredentialOrg(_collegeAddress)){
+            insertSuccess = false;
+            uint32 position = uint32(orgAddressToApplicants[_collegeAddress].push(Applicant(msg.sender, _SSN, _collegeStudentID, _firstName, _lastName, uint32(block.timestamp), 0, "")));
+            if(position >= 0){
+                insertSuccess = true;
+                applicantAddressToApplicantPosition[msg.sender] = position.sub(1);
+                orgAddressToApplicantCount[_collegeAddress] = orgAddressToApplicantCount[_collegeAddress].add(1);
+                emit CreateNewApplicant(msg.sender, 0, "createApplicant (SUCCESS)");
+            } else {
+                emit CreateNewApplicant(msg.sender, 0, "createApplicant (FAIL)");
+            }
         } else {
-            emit CreateNewApplicant(msg.sender, 0, "createApplicant (FAIL)");
+            emit CreateNewApplicant(_collegeAddress, 0, "createApplicant Failure, applied address NOT CredetialOrg");
         }
         return (insertSuccess);
     }
@@ -163,13 +169,18 @@ contract ApplicantFactory is Pausable {
         emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (ATTEMPT)");
         require(_position >= 0, "updateApplicantByOrgAndPosition: Applicant position requires >= 0");
         require(bytes(_processDetail).length >= 0 && bytes(_processDetail).length <= 10, "updateApplicantByOrgAndPosition: Applicant Process Detail Missing");
-        if (_position < orgAddressToApplicantCount[msg.sender]){
-            orgAddressToApplicants[msg.sender][_position].processDate = uint32(block.timestamp);
-            orgAddressToApplicants[msg.sender][_position].processDetail = _processDetail;
-            updateSuccess = true;
-            emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (SUCCESS)");
+        cof = CredentialOrgFactory(credentialOrgContractAddress);
+        if (msg.sender == address(this) || cof.isCredentialOrg(msg.sender)){
+            if (_position < orgAddressToApplicantCount[msg.sender]){
+                orgAddressToApplicants[msg.sender][_position].processDate = uint32(block.timestamp);
+                orgAddressToApplicants[msg.sender][_position].processDetail = _processDetail;
+                updateSuccess = true;
+                emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (SUCCESS)");
+            } else {
+                emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (FAIL) invalid position");
+            }
         } else {
-            emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (FAIL) invalid position");
+            emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (FAIL) msgsender is NOT a credentialling org");
         }
         return(updateSuccess);
     }

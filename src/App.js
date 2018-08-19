@@ -112,9 +112,7 @@ class App extends Component {
               processApplicantsInstance = instance; 
               // set the state of the contract
               this.setState({ processApplicantsContract: processApplicantsInstance}, this.processApplicantsDetail);
-              return credentialOrgFactoryInstance.isCredentialOrg(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB);
-              //return credentialOrgFactoryInstance.isCredentialOrg(this.state.accountCheckSummed);
-              //return credentialOrgFactoryInstance.isCredentialOrg(this.state.account);
+              return credentialOrgFactoryInstance.isCredentialOrg(this.state.account);
             }).then((result) => {
               // Update state with the result.
               if (result){ 
@@ -126,14 +124,11 @@ class App extends Component {
               //return credentialFactoryInstance.selectOrgCredentialCount(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB) 
             }).then ((result) => {
               this.setState({ credentialCount: result.c[0]})
-              //return applicantFactoryInstance.selectOrgApplicantCount(this.state.accountCheckSummed)
-              return applicantFactoryInstance.selectOrgApplicantCount(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
+              return applicantFactoryInstance.selectOrgApplicantCount(this.state.account)
             }).then ((result) => {
               //alert(result.c[0])
               this.setState({applicantCount: result.c[0]})
-              //return credentialOrgFactoryInstance.selectCredentialOrgByAddress(this.state.account)
-              //return credentialOrgFactoryInstance.selectCredentialOrgByAddress(this.state.accountCheckSummed)
-              return credentialOrgFactoryInstance.selectCredentialOrgByAddress(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
+              return credentialOrgFactoryInstance.selectCredentialOrgByAddress(this.state.account)
             }).then ((result) => {
               alert(result)   
               //alert(result) 

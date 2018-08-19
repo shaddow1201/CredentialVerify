@@ -53,9 +53,9 @@ contract TestCredentialFactory {
         string memory credentialLevel;
 
         (credentialLevel, , ) = credentialFactory.selectCredential(owner, 0);
-        string memory expected = "TESTREC";
+        string memory expected = "Credential1";
 
-        Assert.equal(credentialLevel,expected,"Credential Division Matches Expected (TESTREC)");
+        Assert.equal(credentialLevel,expected,"Credential Division Matches Expected (Credential1)");
     }
 
     /**

@@ -24,7 +24,8 @@ contract TestApplicantFactory {
     * @dev Checks to see if an Applicant can be created.
     */
     function testCreateApplicant() public {
-        bool insertSuccess = applicantFactory.createApplicant(address(this), "987654321", "222222222", "Richard", "Noordam");
+        address contractOwner = applicantFactory.getOwner();
+        bool insertSuccess = applicantFactory.createApplicant(contractOwner, "987654321", "222222222", "Richard", "Noordam");
 
         Assert.isTrue(insertSuccess, "Test Insert Successful (True)");
     }
@@ -35,18 +36,9 @@ contract TestApplicantFactory {
     function testSelectValidApplicantByOrgAndPosition() public {
         string memory SSN;                 // Applicant SSN
         (, SSN, , , ) = applicantFactory.selectApplicantByOrgAndPosition(account0, 0);
-        string memory expected = "987654321";
+        string memory expected = "123456781";
 
         Assert.equal(SSN, expected, "Valid Applicant Lookup Successful.");
-    }
-
-    /**
-    * @dev Checks to see if an appliant can be updated by org and position.
-    */
-    function testUpdateApplicantByOrgAndPosition() public {
-        bool updateSuccess = applicantFactory.updateApplicantByOrgAndPosition(0, "APPROVED");
-
-        Assert.isTrue(updateSuccess, "Record Update Successful (True)");
     }
 
     /**
@@ -64,10 +56,11 @@ contract TestApplicantFactory {
     * @dev Checks the Valid Applicant Count by passed in Org.
     */
     function testSelectValidOrgApplicantCount() public {
-        uint256 applicantCount = uint256(applicantFactory.selectOrgApplicantCount(address(this)));
-        uint256 expected = 1;
+        address contractOwner = applicantFactory.getOwner();
+        uint256 applicantCount = uint256(applicantFactory.selectOrgApplicantCount(contractOwner));
+        uint256 expected = 6;
 
-        Assert.equal(applicantCount, expected, "Applicant Count (1 expected)");
+        Assert.equal(applicantCount, expected, "Applicant Count 6 expected (5 initial, 1 added during test)");
     }
 
     /**
