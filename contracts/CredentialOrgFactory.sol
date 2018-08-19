@@ -15,8 +15,8 @@ contract CredentialOrgFactory is Pausable {
     mapping(address => CredentialOrg) addressToCredentialOrg;
     
     // events 
-    event CredentialOrgCreateEvent(string shortName, address schoolAddress, string detail);
-    event CredentialOrgEvent(address schoolAddress, string detail);
+    event CredentialOrgCreateEvent(string shortName, address indexed schoolAddress, string detail);
+    event CredentialOrgEvent(address indexed schoolAddress, string detail);
 
     // # of credentialling orgs created.
     uint32 private credentialOrgCount;
@@ -60,7 +60,7 @@ contract CredentialOrgFactory is Pausable {
     public onlyOwner
     returns (bool createStatus)
     {
-        emit CredentialOrgCreateEvent(_shortName, _schoolAddress, "New Org Add (PRE)");
+        emit CredentialOrgCreateEvent(_shortName, _schoolAddress, "createCredentialOrg (PRE)");
         require(bytes(_shortName).length > 0 && bytes(_shortName).length < 31, "createCredentialOrg shortName problem");
         require(bytes(_officialSchoolName).length > 0 && bytes(_officialSchoolName).length < 70, "createCredentialOrg officalSchoolName length problem");
         require(_schoolAddress != 0, "createCredentialOrg (FAIL) school Address can not be 0");

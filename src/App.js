@@ -17,7 +17,10 @@ class App extends Component {
       contract: null,
       account: null,
       credentialOrgCount: null,
-      isCredentialOrg : null
+      isCredentialOrg : null,
+      shortName : null,
+      schoolAddress : null,
+      detail : null
     }
   }
 
@@ -50,24 +53,41 @@ class App extends Component {
     // Get accounts.
     this.state.web3.eth.getAccounts((error, accounts) => {
       credentialOrgFactory.deployed().then((instance) => {
-        //credentialOrgFactory.
         credentialOrgFactoryInstance = instance
-        //var util = require('web3-utils');
+        this.setState({ contract: credentialOrgFactoryInstance, account: accounts[0]}, this.anotherFunction);
+
+        var credentialOrgEvent = credentialOrgFactoryInstance.CredentialOrgEvent({schoolAddress: this.state.schoolAddress});
+        credentialOrgEvent.watch(function(err, result) {
+          console.log ("result: " + result);
+          if (err) {
+            console.log(err)
+            return;
+          }
+          console.log("SchoolAddress is: " + result.args.schoolAddress.c[0].toString())
+          return this.setState({ schoolAddress: result.args.schoolAddress.c[0].toString() });
+        }.bind(this))
+
+        //alert(this.state.web3.toCheckSumAddress(accounts[0]));
         // calls isCredentialOrg function (returns true/false)
         //return credentialOrgFactoryInstance.isCredentialOrg(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
-
+        //alert(web3.utils.isAddress(accounts[0]));
+        
         return credentialOrgFactoryInstance.isCredentialOrg(accounts[0]);
       }).then((result) => {
         // Update state with the result.
         console.log(result);
         if (result){
-          return this.setState({ isCredentialOrg: "true", contract: credentialOrgFactoryInstance, account: accounts[0] })
+          return this.setState({ isCredentialOrg: "true"})
         } else {
-          return this.setState({ isCredentialOrg: "false", contract: credentialOrgFactoryInstance, account: accounts[0] })
+          return this.setState({ isCredentialOrg: "false"})
         }
       })
 
     })
+  }
+
+  anotherFunction(event){
+    console.log(this.state.schoolAddress);
   }
 
   handleClick(event){
