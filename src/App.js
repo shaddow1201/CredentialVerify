@@ -80,7 +80,7 @@ class App extends Component {
         credentialOrgFactoryInstance = instance;
         // set the state of the contract
         this.setState({ credentialOrgFactoryContract: credentialOrgFactoryInstance}, this.credentialOrgFactoryDetail);
-        var credentialOrgFactoryEvent = credentialOrgFactoryInstance.CredentialOrgEvent({schoolAddress: this.state.schoolAddress});
+        var credentialOrgFactoryEvent = credentialOrgFactoryInstance.CredentialOrgEvent({schoolAddress: this.state.schoolAddress, account: accounts[0]});
         credentialOrgFactoryEvent.watch(function(err, result) {
           console.log("result.args");
           console.log (result.args);
@@ -105,7 +105,7 @@ class App extends Component {
           applicantFactory.deployed().then((instance) => {
             applicantFactoryInstance = instance;
             // set the state of the contract
-            return this.setState({ applicantFactoryContract: applicantFactoryInstance}, this.applicantFactoryDetail);
+            return this.setState({ applicantFactoryContract: applicantFactoryInstance, account: accounts[0]}, this.applicantFactoryDetail);
           }).then((result) =>{
             //console.log(result);
             processApplicants.deployed().then((instance) => {
@@ -113,6 +113,7 @@ class App extends Component {
               // set the state of the contract
               this.setState({ processApplicantsContract: processApplicantsInstance}, this.processApplicantsDetail);
               return credentialOrgFactoryInstance.isCredentialOrg(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB);
+              //return credentialOrgFactoryInstance.isCredentialOrg(this.state.accountCheckSummed);
               //return credentialOrgFactoryInstance.isCredentialOrg(this.state.account);
             }).then((result) => {
               // Update state with the result.
@@ -163,15 +164,17 @@ class App extends Component {
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
     const account = this.state.account
 
-    alert(account);
-    alert(this.state.web3.toChecksumAddress(account));
+    //alert(account);
+    //alert(this.state.web3.toChecksumAddress(account));
     //alert(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
     //credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", account)
-    credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", this.state.web3.toChecksumAddress(account))
-    //credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB")
+    //credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", this.state.web3.toChecksumAddress(account))
+    var test = this.state.web3.toChecksumAddress(account)
+    alert(this.state.web3.isAddress(test))
+    credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", test)
     // this.state.accountCheckSummed )
     .then(result => {
-      alert(result);
+      //alert(result);
       return this.setState({applicantCount: result.c[0]})
     })
   }
