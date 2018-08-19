@@ -62,6 +62,8 @@ contract CredentialFactory is Pausable{
     */
     function setAddress(address _credentialOrgContractAddress) public onlyOwner {
         credentialOrgContractAddress = _credentialOrgContractAddress;
+        cof = CredentialOrgFactory(credentialOrgContractAddress);
+
     }
 
     /**
@@ -72,7 +74,7 @@ contract CredentialFactory is Pausable{
     * @return insertStatus - true false if insert happened.
     */
     function createCredential(string _credentialLevel, string _credentialTitle, string _credentialDivision, address _credentialOrgAddress) 
-    public onlyOwner
+    public onlyOwner whenNotPaused
     returns (bool insertStatus)
     {
         emit CredentialFactoryActivity(msg.sender, _credentialTitle, "New Credential Add (ATTEMPT)");

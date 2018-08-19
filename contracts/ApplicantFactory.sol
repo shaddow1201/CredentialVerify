@@ -48,21 +48,6 @@ contract ApplicantFactory is Pausable {
 
     CredentialOrgFactory cof;
 
-    // modifiers
-    /**
-    * @dev Modifer onlyBy for Access Control
-    */
-    modifier onlyBy(address _credentialOrgAddress){
-        uint32 foundAccount = 0;
-        cof = CredentialOrgFactory(credentialOrgContractAddress);
-        if (cof.isCredentialOrg(msg.sender)){
-            foundAccount = 1;
-        }
-        if (foundAccount == 0) revert("Not Authorized CredentialOrg");
-        _;
-    }
-
-
     // functions
     /**
     * @dev Gets Owner Address of Contract
@@ -83,6 +68,7 @@ contract ApplicantFactory is Pausable {
         if (msg.sender == owner){
             credentialOrgContractAddress = _credentialOrgContractAddress;
         }
+        cof = CredentialOrgFactory(credentialOrgContractAddress);
     }
 
     /**
@@ -95,7 +81,7 @@ contract ApplicantFactory is Pausable {
     * @return insertSuccess true/false of 
     */
     function createApplicant(address _collegeAddress, string _SSN, string _collegeStudentID, string _firstName, string _lastName) 
-    public 
+    public whenNotPaused
     returns (bool insertSuccess)
     {
         emit CreateNewApplicant(msg.sender, 0, "createApplicant (ATTEMPT)");
@@ -162,7 +148,7 @@ contract ApplicantFactory is Pausable {
     * @return updateSuccess true/false
     */
     function updateApplicantByOrgAndPosition(uint32 _position, string _processDetail)
-    public //onlyBy(msg.sender)
+    public whenNotPaused
     returns (bool updateSuccess)
     {
         updateSuccess = false;

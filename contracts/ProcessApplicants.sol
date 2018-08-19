@@ -64,9 +64,6 @@ contract ProcessApplicants is Pausable {
 
     // constructor
     constructor () public {
-        af = ApplicantFactory(applicantFatoryAddress);
-        cf = CredentialFactory(credentialFactoryAddress);
-        cof = CredentialOrgFactory(credentialOrgFactoryAddress);
     }
 
     // functions
@@ -95,6 +92,10 @@ contract ProcessApplicants is Pausable {
             credentialFactoryAddress = _credentialContractAddress;
             applicantFatoryAddress = _applicantContractAddress;
         }
+        af = ApplicantFactory(applicantFatoryAddress);
+        cf = CredentialFactory(credentialFactoryAddress);
+        cof = CredentialOrgFactory(credentialOrgFactoryAddress);
+
     }    
 
     /**
@@ -102,7 +103,7 @@ contract ProcessApplicants is Pausable {
     * @param _position positon at which to start processing.
     */
     function updateApplicantProcessingPosition(uint32 _position)
-    public
+    public whenNotPaused
     {
         // since we only work on own data, reprocessing isn't an issue.  
         // Do want to relook at this. will probably want to limit this

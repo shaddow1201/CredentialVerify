@@ -18,11 +18,11 @@ class App extends Component {
       storageValue: 0,
       web3: null,
       account: null,
-      accountCheckSummed: null,
       credentialOrgCount: null,
       credentialCount: null,
       isCredentialOrg : null,
-      shortName : null,
+      schoolShortName : null,
+      officialSchoolName: null,
       schoolAddress : 0,
       detail : null,
       applicantZCount: null,
@@ -30,7 +30,9 @@ class App extends Component {
       credentialFactoryContract: null,
       applicantFactoryContract: null,
       processApplicantContract: null,
-      testHolder: null
+      createCredentialOrgShortName: null,
+      createCredentialOrgOfficialSchoolName: null,
+      createCredentialOrgSchoolAddress: null
     }
   }
 
@@ -95,7 +97,6 @@ class App extends Component {
 
       }).then((result) => {
         // Update state with the result.
-        //console.log(result);
         credentialFactory.deployed().then((instance) => {
           credentialFactoryInstance = instance;
           // set the state of the contract
@@ -121,21 +122,18 @@ class App extends Component {
                 this.setState({ isCredentialOrg: "false"})
               }
               return credentialFactoryInstance.selectOrgCredentialCount(this.state.account) 
-              //return credentialFactoryInstance.selectOrgCredentialCount(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB) 
             }).then ((result) => {
               this.setState({ credentialCount: result.c[0]})
               return applicantFactoryInstance.selectOrgApplicantCount(this.state.account)
             }).then ((result) => {
-              //alert(result.c[0])
               this.setState({applicantCount: result.c[0]})
               return credentialOrgFactoryInstance.selectCredentialOrgByAddress(this.state.account)
             }).then ((result) => {
-              alert(result)   
-              //alert(result) 
-              //var tmpArray = result.split(",")
-              this.setState({testHolder: result})   
-              //alert(this.state.testHolder);
-
+              var testVal = result.toString().split(",");                
+              this.setState({schoolShortName: testVal[0], officialSchoolName: testVal[1], schoolAddress: testVal[2]})   
+              return credentialOrgFactoryInstance.selectOrgCount()
+            }).then ((result) => {
+              this.setState({credentialOrgCount: result.c[0]})
             })
           })
         })
@@ -156,20 +154,32 @@ class App extends Component {
     console.log("Log Event: set ProcessApplicants Contract State");
   }
 
-  Check(event){
+  createCredentialOrg(event){
+    alert("Attempting Create");
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
-    const account = this.state.account
+    var holder = this.state.web3.isAddress(this.state.createCredentialOrgSchoolAddress)
+    if (holder){
+      credentialOrgFactoryContract.createCredentialOrg(this.state.createCredentialOrgShortName, this.state.createCredentialOrgOfficialSchoolName, this.state.createCredentialOrgSchoolAddresst)
+      .then(result => {
+        alert(result);
+        return credentialOrgFactoryContract.selectOrgCount()
+      }).then ((result) => {
+        alert(result)
+        this.setState({credentialOrgCount: result.c[0]})
 
-    //credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", account)
-    //credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", this.state.web3.toChecksumAddress(account))
-    var test = this.state.web3.toChecksumAddress(account)
-    alert(this.state.web3.isAddress(test))
-    credentialOrgFactoryContract.createCredentialOrg("TESTINSERT", "TESTSCHOOLNAME", test)
-    // this.state.accountCheckSummed )
-    .then(result => {
-      //alert(result);
-      return this.setState({applicantCount: result.c[0]})
-    })
+      })
+    }
+  }
+
+  createOrgShortNameChange(event){
+    alert("change detected");
+    this.setState({createCredentialOrgShortName: event.target.value});
+  }
+  createOrgOfficialNameChange(event){
+    this.setState({createCredentialOrgOfficialSchoolName: event.target.value});
+  }
+  createOrgSchoolAddress(event){
+    this.setState({createCredentialOrgSchoolAddress: event.target.value});
   }
 
 
@@ -184,12 +194,21 @@ class App extends Component {
           <div className="pure-g">
             <div className="pure-u-1-1">
               <h1>Welcome to Credential Verify!</h1>
-
-              <p>CurrentAccount isCredentialOrg: {this.state.isCredentialOrg}</p>
-              <p>Credential Count: {this.state.credentialCount}</p>
-              <p>CredentialOrg Applicant Count: {this.state.applicantCount}</p>
-
-              <button onClick={this.Check.bind(this)}>CredentialOrg?</button>
+              <p>CurrentAccount isCredentialOrg: {this.state.isCredentialOrg}<br/>
+              Total Credential Orgs: {this.state.credentialOrgCount}<br/>
+              School ShortName: {this.state.schoolShortName}<br/>
+              School Official Name: {this.state.officialSchoolName}<br/>
+              SchoolAddress: {this.state.schoolAddress}<br/>
+              Credential Count: {this.state.credentialCount}<br/>
+              CredentialOrg Applicant Count: {this.state.applicantCount}</p>
+              <table>
+                <tbody>
+                <tr><td>School Short Name</td><td><input type="text" maxLength="30"  size="32" value={this.state.createCredentialOrgShortName} onChange={this.createOrgShortNameChange} /></td></tr>
+                <tr><td>School Official Name</td><td><input type="text" maxLength="70"  size="72" value={this.state.createCredentialOrgOfficialSchoolName} onChange={this.createOrgOfficialNameChange} /></td></tr>
+                <tr><td>School Address</td><td><input type="text" maxLength="42"  size="50" value={this.state.createCredentialOrgSchoolAddress} onChange={this.createOrgSchoolAddress} /></td></tr>
+                </tbody>
+              </table>
+              <button onClick={this.createCredentialOrg.bind(this)}>Create Credential Org?</button>
             </div>
           </div>
         </main>
