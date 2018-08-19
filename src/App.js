@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import CredentialOrgFactoryContract from '../build/contracts/CredentialOrgFactory.json'
+import CredentialFactoryContract from '../build/contracts/CredentialFactory.json'
+import ApplicantFactoryContract from '../build/contracts/ApplicantFactory.json'
+import ProcessApplicantsContract from '../build/contracts/ProcessApplicants.json'
 import getWeb3 from './utils/getWeb3'
 
 import './css/oswald.css'
@@ -19,7 +22,7 @@ class App extends Component {
       credentialOrgCount: null,
       isCredentialOrg : null,
       shortName : null,
-      schoolAddress : null,
+      schoolAddress : 0,
       detail : null
     }
   }
@@ -35,60 +38,103 @@ class App extends Component {
       })
 
       // Instantiate contract once web3 provided.
-      this.instantiateContract()
+      this.instantiateContracts()
     })
     .catch(() => {
       console.log('Error finding web3.')
     })
   }
 
-  instantiateContract() {
+
+
+  instantiateContracts() {
 
     const contract = require('truffle-contract')
-    const credentialOrgFactory = contract(CredentialOrgFactoryContract)
-    credentialOrgFactory.setProvider(this.state.web3.currentProvider)
+    const credentialOrgFactory = contract(CredentialOrgFactoryContract);
+    const credentialFactory = contract(CredentialFactoryContract);
+    const applicantFactory = contract(ApplicantFactoryContract);
+    const processApplicants = contract(ProcessApplicantsContract);
+    credentialOrgFactory.setProvider(this.state.web3.currentProvider);
+    credentialFactory.setProvider(this.state.web3.currentProvider);
+    applicantFactory.setProvider(this.state.web3.currentProvider);
+    processApplicants.setProvider(this.state.web3.currentProvider);
 
     // Declaring this for later so we can chain functions on CredentialOrgFactory.
     var credentialOrgFactoryInstance
+    var credentialFactoryInstance
+    var applicantFactoryInstance
+    var processApplicantsInstance
+    
     // Get accounts.
     this.state.web3.eth.getAccounts((error, accounts) => {
       credentialOrgFactory.deployed().then((instance) => {
-        credentialOrgFactoryInstance = instance
-        this.setState({ contract: credentialOrgFactoryInstance, account: accounts[0]}, this.anotherFunction);
-
-        var credentialOrgEvent = credentialOrgFactoryInstance.CredentialOrgEvent({schoolAddress: this.state.schoolAddress});
-        credentialOrgEvent.watch(function(err, result) {
-          console.log ("result: " + result);
+        credentialOrgFactoryInstance = instance;
+        // set the state of the contract
+        this.setState({ contract: credentialOrgFactoryInstance, account: accounts[0]}, this.credentialOrgFactoryDetail);
+        var credentialOrgFactoryEvent = credentialOrgFactoryInstance.CredentialOrgEvent({schoolAddress: this.state.schoolAddress});
+        credentialOrgFactoryEvent.watch(function(err, result) {
+          console.log("result.args");
+          console.log (result.args);
           if (err) {
-            console.log(err)
+            console.log(err);
             return;
           }
-          console.log("SchoolAddress is: " + result.args.schoolAddress.c[0].toString())
-          return this.setState({ schoolAddress: result.args.schoolAddress.c[0].toString() });
-        }.bind(this))
+          this.credentialOrgFactoryDetail(result.args.schoooAddress.c[0]);
+          console.log("SchoolAddress is: " + result.args.schoolAddress.c[0])
+          return this.setState({ schoolAddress: result.args.schoolAddress.c[0]});
+        }.bind(this));
 
-        //alert(this.state.web3.toCheckSumAddress(accounts[0]));
-        // calls isCredentialOrg function (returns true/false)
-        //return credentialOrgFactoryInstance.isCredentialOrg(0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB)
-        //alert(web3.utils.isAddress(accounts[0]));
-        
-        return credentialOrgFactoryInstance.isCredentialOrg(accounts[0]);
       }).then((result) => {
         // Update state with the result.
-        console.log(result);
-        if (result){
-          return this.setState({ isCredentialOrg: "true"})
-        } else {
-          return this.setState({ isCredentialOrg: "false"})
-        }
+        //console.log(result);
+        credentialFactory.deployed().then((instance) => {
+          credentialFactoryInstance = instance;
+          // set the state of the contract
+          this.setState({ contract: credentialFactoryInstance, account: accounts[0]}, this.credentialFactoryDetail);
+  
+        }).then((result) => {
+          //console.log(result);
+          applicantFactory.deployed().then((instance) => {
+            applicantFactoryInstance = instance;
+            // set the state of the contract
+            this.setState({ contract: applicantFactoryInstance, account: accounts[0]}, this.applicantFactoryDetail);
+  
+          }).then((result) =>{
+            //console.log(result);
+            processApplicants.deployed().then((instance) => {
+              processApplicantsInstance = instance;
+              // set the state of the contract
+              this.setState({ contract: processApplicantsInstance, account: accounts[0]}, this.processApplicantsDetail);
+              return credentialOrgFactoryInstance.isCredentialOrg(accounts[0]);
+            }).then((result) => {
+              // Update state with the result.
+              console.log(result);
+              if (result){
+                return this.setState({ isCredentialOrg: "true"})
+              } else {
+                return this.setState({ isCredentialOrg: "false"})
+              }
+            })
+          })
+        })
       })
-
     })
   }
 
-  anotherFunction(event){
-    console.log(this.state.schoolAddress);
+  credentialOrgFactoryDetail(event){
+    console.log("Log Event: set CredentialOrgFactory Contract State");
   }
+  credentialFactoryDetail(event){
+    console.log("Log Event: set CredentialFactory Contract State");
+  }
+  applicantFactoryDetail(event){
+    console.log("Log Event: set ApplicantFactory Contract State");
+  }
+  processApplicantsDetail(event){
+    console.log("Log Event: set ProcessApplicants Contract State");
+  }
+
+
 
   handleClick(event){
     const contract = this.state.contract
