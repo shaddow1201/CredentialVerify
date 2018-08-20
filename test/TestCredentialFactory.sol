@@ -59,7 +59,7 @@ contract TestCredentialFactory {
     }
 
     /**
-    * @dev Tests to see if Credential Records can be inserted. (anyone can insert, but you can only create records for YOU.)
+    * @dev Tests to see if Credential Records can be inserted. 
     */
     function testInsertCredentialRecord() public {
         bool insertSuccess = credentialFactoryB.createCredential("ANOTHERREC", "AAAA", "AAAAAA", address(this));

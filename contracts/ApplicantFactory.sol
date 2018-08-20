@@ -148,7 +148,7 @@ contract ApplicantFactory is Pausable {
     * @return updateSuccess true/false
     */
     function updateApplicantByOrgAndPosition(uint32 _position, string _processDetail)
-    public whenNotPaused
+    public onlyOwner whenNotPaused
     returns (bool updateSuccess)
     {
         updateSuccess = false;
