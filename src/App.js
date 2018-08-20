@@ -89,7 +89,7 @@ class App extends Component {
         this.setState({ credentialOrgFactoryContract: credentialOrgFactoryInstance}, this.credentialOrgFactoryDetail);
         var credentialOrgFactoryEvent = credentialOrgFactoryInstance.CredentialOrgEvent();
         credentialOrgFactoryEvent.watch(function(err, result) {
-          alert("OMG I GOT AN EVENT!!!");
+          alert("OMG, GOT A CREDENTIALORGFACTORY EVENT!!!");
           console.log("result.args");
           console.log (result.args);
           if (err) {
@@ -107,13 +107,32 @@ class App extends Component {
         // Update state with the result.
         credentialFactory.deployed().then((instance) => {
           credentialFactoryInstance = instance;
+          var credentialFactoryEvent = credentialFactoryInstance.CredentialEvent();
+          credentialFactoryEvent.watch(function(err, result) {
+            alert("OMG, GOT A CREDENTIALFACTORY EVENT!!!");
+            console.log("result.args");
+            console.log (result.args);
+            if (err) {
+              console.log(err);
+              return;
+            }
+  
           // set the state of the contract
           return this.setState({ credentialFactoryContract: credentialFactoryInstance, account: accounts[0], accountCheckSummed: this.state.web3.toChecksumAddress(accounts[0])}, this.credentialFactoryDetail);
         }).then((result) => {
           //console.log(result);
           applicantFactory.deployed().then((instance) => {
             applicantFactoryInstance = instance;
-            // set the state of the contract
+            var applicantFactoryEvent = applicantFactoryInstance.ApplicantEvent();
+            credentialFactoryEvent.watch(function(err, result) {
+              alert("OMG, GOT A APPLICANTFACTORY EVENT!!!");
+              console.log("result.args");
+              console.log (result.args);
+              if (err) {
+                console.log(err);
+                return;
+              }
+              // set the state of the contract
             return this.setState({ applicantFactoryContract: applicantFactoryInstance, account: accounts[0]}, this.applicantFactoryDetail);
           }).then((result) =>{
             //console.log(result);

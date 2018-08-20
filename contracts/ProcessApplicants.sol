@@ -98,24 +98,10 @@ contract ProcessApplicants is Pausable {
     }    
 
     /**
-    * @dev Allows resetting of Applicant Position lookup.
-    * @param _position positon at which to start processing.
-    */
-    function updateApplicantProcessingPosition(uint32 _position)
-    public whenNotPaused
-    {
-        // since we only work on own data, reprocessing isn't an issue.  
-        // Do want to relook at this. will probably want to limit this
-        // to just a few backwards.   maybe just minus 1.
-        require(_position >= 0, "updateApplicantProcessingPosition: (FAIL) position has to be 0 or greater");
-        credentailOrgToApplicantPosition[msg.sender] = _position;
-    }
-
-    /**
     * @dev Allows credentialOrg to select next Applicant (or sends back blank of not available/error)
     */
     function selectCredentialOrgNextApplicant()
-    public
+    public view
     returns (address studentAddress, string SSN, string collegeStudentID, string firstName,  string lastName, uint32 insertDate)
     {
         if (af.selectOrgApplicantCount(msg.sender) >= credentailOrgToApplicantPosition[msg.sender]){
