@@ -32,7 +32,8 @@ class App extends Component {
       detail : null,
       createCredentialOrgShortName: "",
       createCredentialOrgOfficialSchoolName: "",
-      createCredentialOrgSchoolAddress: ""
+      createCredentialOrgSchoolAddress: "",
+      createdSchoolAddress: null
     };
     //this.createOrgShortNameChange.bind(this);
     //this.createOrgOfficialNameChange.bind(this);
@@ -80,7 +81,7 @@ class App extends Component {
     
     // Get accounts.
     this.state.web3.eth.getAccounts((error, accounts) => {
-      //this.state.web3.eth.defaultAccount = accounts[0];
+      this.state.web3.eth.defaultAccount = accounts[0];
       credentialOrgFactory.deployed().then((instance) => {
         //this.state.web3.eth.defaultAccount = this.state.web3.eth.accounts[0];
         credentialOrgFactoryInstance = instance;
@@ -88,15 +89,18 @@ class App extends Component {
         this.setState({ credentialOrgFactoryContract: credentialOrgFactoryInstance}, this.credentialOrgFactoryDetail);
         var credentialOrgFactoryEvent = credentialOrgFactoryInstance.CredentialOrgEvent({schoolAddress: this.state.schoolAddress, account: accounts[0]});
         credentialOrgFactoryEvent.watch(function(err, result) {
+          alert("OMG I GOT AN EVENT!!!");
           console.log("result.args");
           console.log (result.args);
           if (err) {
             console.log(err);
             return;
           }
-          this.credentialOrgFactoryDetail(result.args.schoooAddress.c[0]);
-          console.log("SchoolAddress is: " + result.args.schoolAddress.c[0])
-          return this.setState({ schoolAddress: result.args.schoolAddress.c[0]});
+          //this.credentialOrgFactoryDetail(result.args.schoooAddress.c[0]);
+          //console.log("SchoolAddress is: " + result.args.schoolAddress.c[0])
+          alert(result.args.schoolAddress.c[0]);
+          return this.setState({ createdSchoolAddress: result.args.schoolAddress.c[0]});
+
         }.bind(this));
 
       }).then((result) => {
@@ -170,15 +174,20 @@ class App extends Component {
       b = this.state.createCredentialOrgOfficialSchoolName;
       c = this.state.createCredentialOrgSchoolAddress
 
-      alert(a);
-      alert(b);
-      alert(c);
+      console.log(c)
+      console.log(JSON.stringify(this.state.createCredentialOrgSchoolAddress))
       return credentialOrgFactoryContract.createCredentialOrg(a, b, c)
       .then(result => {
-        alert(result);
+        console.log(result)
+        //alert(result);
+        if (result === undefined){
+          alert("insert failure")
+        } else {
+          alert("insert success")
+        }
         return credentialOrgFactoryContract.selectOrgCount()
       }).then ((result) => {
-        alert(result)
+        //alert(result.c[0])
         this.setState({credentialOrgCount: result.c[0]})
 
       })

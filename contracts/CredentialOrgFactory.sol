@@ -15,7 +15,7 @@ contract CredentialOrgFactory is Pausable {
     mapping(address => CredentialOrg) addressToCredentialOrg;
     
     // events 
-    event CredentialOrgCreateEvent(string shortName, address indexed schoolAddress, string detail);
+    //event CredentialOrgCreateEvent(string shortName, address indexed schoolAddress, string detail);
     event CredentialOrgEvent(address indexed schoolAddress, string detail);
 
     // # of credentialling orgs created.
@@ -60,7 +60,7 @@ contract CredentialOrgFactory is Pausable {
     public onlyOwner whenNotPaused
     returns (bool createStatus)
     {
-        emit CredentialOrgCreateEvent(_shortName, _schoolAddress, "createCredentialOrg (PRE)");
+        emit CredentialOrgEvent(_schoolAddress, "createCredentialOrg (PRE)");
         require(bytes(_shortName).length > 0 && bytes(_shortName).length < 31, "createCredentialOrg shortName problem");
         require(bytes(_officialSchoolName).length > 0 && bytes(_officialSchoolName).length < 70, "createCredentialOrg officalSchoolName length problem");
         require(_schoolAddress != 0, "createCredentialOrg (FAIL) school Address can not be 0");        
@@ -73,12 +73,12 @@ contract CredentialOrgFactory is Pausable {
                 addressToCredentialOrg[_schoolAddress] = credentialOrgs[position.sub(1)];
                 credentialOrgCount = credentialOrgCount.add(1);
                 createStatus = true;
-                emit CredentialOrgCreateEvent(_shortName, _schoolAddress, "createCredentialOrg (SUCCESS)");
+                emit CredentialOrgEvent(_schoolAddress, "createCredentialOrg (SUCCESS)");
             } else {
-                emit CredentialOrgCreateEvent(_shortName, _schoolAddress, "createCredentialOrg (FAIL)");
+                emit CredentialOrgEvent(_schoolAddress, "createCredentialOrg (FAIL)");
             }
         } else {
-            emit CredentialOrgCreateEvent(_shortName, _schoolAddress, "createCredentialOrg (FAIL) org Already exists");
+            emit CredentialOrgEvent(_schoolAddress, "createCredentialOrg (FAIL) org Already exists");
         }
         return (createStatus);
     }
