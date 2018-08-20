@@ -36,8 +36,7 @@ contract ProcessApplicants is Pausable {
     mapping (address => uint32) credentailOrgToApplicantPosition;
 
     // events
-    event ProcessCredentialApplicant(address orgAddress, address ApplicantAddress, uint32 position, string detail);
-    event ProcessCredentialDetail(address orgAddress,string detail);
+    event ProcessCredentialEvent(address orgAddress,string detail);
 
     // variables
     address private credentialOrgFactoryAddress;
@@ -53,7 +52,7 @@ contract ProcessApplicants is Pausable {
         if (cof.isCredentialOrg(msg.sender)){
             foundAccount = 1;
         }
-        if (foundAccount == 0) revert("Not Authorized CredentialOrg");
+        require(foundAccount == 1,"Not Authorized CredentialOrg");
         _;
     }
     // References for the other contracts

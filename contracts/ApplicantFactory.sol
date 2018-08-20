@@ -18,8 +18,7 @@ contract ApplicantFactory is Pausable {
     using SafeMath32 for uint32;
 
     // contract events.
-    event CreateNewApplicant(address ApplicantAddress, uint32 position, string detail);
-    event ApplicantDetail(address ApplicantCallerAddress, string detail);
+    event ApplicantEvent(address ApplicantCallerAddress, string detail);
     
     // mappings
     mapping (address => Applicant[]) orgAddressToApplicants;
@@ -84,7 +83,7 @@ contract ApplicantFactory is Pausable {
     public whenNotPaused
     returns (bool insertSuccess)
     {
-        emit CreateNewApplicant(msg.sender, 0, "createApplicant (ATTEMPT)");
+        emit ApplicantEvent(msg.sender, "createApplicant (ATTEMPT)");
         require(msg.sender != 0 && _collegeAddress != 0, "createApplicant (FAIL) Addresses can not be 0.");
         require(bytes(_SSN).length == 9,"createApplicant (FAIL) SSN Length incorrect");
         require(bytes(_collegeStudentID).length == 9, "createApplicant (FAIL)College StudentID length Problem");
@@ -98,12 +97,12 @@ contract ApplicantFactory is Pausable {
                 insertSuccess = true;
                 applicantAddressToApplicantPosition[msg.sender] = position.sub(1);
                 orgAddressToApplicantCount[_collegeAddress] = orgAddressToApplicantCount[_collegeAddress].add(1);
-                emit CreateNewApplicant(msg.sender, 0, "createApplicant (SUCCESS)");
+                emit ApplicantEvent(msg.sender, "createApplicant (SUCCESS)");
             } else {
-                emit CreateNewApplicant(msg.sender, 0, "createApplicant (FAIL)");
+                emit ApplicantEvent(msg.sender, "createApplicant (FAIL)");
             }
         } else {
-            emit CreateNewApplicant(_collegeAddress, 0, "createApplicant Failure, applied address NOT CredetialOrg");
+            emit ApplicantEvent(_collegeAddress, "createApplicant Failure, applied address NOT CredetialOrg");
         }
         return (insertSuccess);
     }
@@ -129,14 +128,14 @@ contract ApplicantFactory is Pausable {
             collegeStudentID = orgAddressToApplicants[_orgAddress][_position].collegeStudentID;
             firstName = orgAddressToApplicants[_orgAddress][_position].firstName;
             lastName = orgAddressToApplicants[_orgAddress][_position].lastName;
-            emit ApplicantDetail(msg.sender, "selectApplicantByOrgAndPosition (SUCCESS)");
+            emit ApplicantEvent(msg.sender, "selectApplicantByOrgAndPosition (SUCCESS)");
         } else {
             studentAddress = 0;
             SSN = "";
             collegeStudentID = "";
             firstName = "";
             lastName = "";
-            emit ApplicantDetail(msg.sender, "selectApplicant (FAIL) Applicant lookup fail");
+            emit ApplicantEvent(msg.sender, "selectApplicant (FAIL) Applicant lookup fail");
         }
         return(studentAddress, SSN, collegeStudentID, firstName, lastName);
     }
@@ -161,12 +160,12 @@ contract ApplicantFactory is Pausable {
                 orgAddressToApplicants[msg.sender][_position].processDate = uint32(block.timestamp);
                 orgAddressToApplicants[msg.sender][_position].processDetail = _processDetail;
                 updateSuccess = true;
-                emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (SUCCESS)");
+                emit ApplicantEvent(msg.sender, "updateApplicantByOrgAndPosition (SUCCESS)");
             } else {
-                emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (FAIL) invalid position");
+                emit ApplicantEvent(msg.sender, "updateApplicantByOrgAndPosition (FAIL) invalid position");
             }
         } else {
-            emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (FAIL) msgsender is NOT a credentialling org");
+            emit ApplicantEvent(msg.sender, "updateApplicantByOrgAndPosition (FAIL) msgsender is NOT a credentialling org");
         }
         return(updateSuccess);
     }

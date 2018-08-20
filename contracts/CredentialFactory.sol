@@ -18,7 +18,7 @@ contract CredentialFactory is Pausable{
     using SafeMath32 for uint32;
     
     // event
-    event CredentialFactoryActivity(address credentialOrg, string credentialTitle, string detail);
+    event CredentialFactoryEvent(address credentialOrg, string credentialTitle, string detail);
 
     // mapping
     mapping (address => Credential[]) orgAddressToCredentials;
@@ -77,7 +77,7 @@ contract CredentialFactory is Pausable{
     public onlyOwner whenNotPaused
     returns (bool insertStatus)
     {
-        emit CredentialFactoryActivity(msg.sender, _credentialTitle, "New Credential Add (ATTEMPT)");
+        emit CredentialFactoryEvent(msg.sender, _credentialTitle, "New Credential Add (ATTEMPT)");
         insertStatus = false;
         require(bytes(_credentialLevel).length > 0 && bytes(_credentialLevel).length < 50, "createCredential - Level length problem");
         require(bytes(_credentialTitle).length > 0 && bytes(_credentialTitle).length < 70, "createCredential - Title length problem");
@@ -86,9 +86,9 @@ contract CredentialFactory is Pausable{
         if(position > 0){
             insertStatus = true;
             orgAddressToCredentialTotalCount[_credentialOrgAddress] = orgAddressToCredentialTotalCount[_credentialOrgAddress].add(1);
-            emit CredentialFactoryActivity(_credentialOrgAddress, _credentialTitle, "New Credential Add (SUCCCESS)");
+            emit CredentialFactoryEvent(_credentialOrgAddress, _credentialTitle, "New Credential Add (SUCCCESS)");
         } else {
-            emit CredentialFactoryActivity(_credentialOrgAddress, _credentialTitle, "New Credential Add (FAILED)");
+            emit CredentialFactoryEvent(_credentialOrgAddress, _credentialTitle, "New Credential Add (FAILED)");
         }
     }
 
@@ -108,7 +108,7 @@ contract CredentialFactory is Pausable{
         if (_position < orgAddressToCredentialTotalCount[_credentialOrgAddress]){
             return (orgAddressToCredentials[_credentialOrgAddress][_position].credentialLevel,orgAddressToCredentials[_credentialOrgAddress][_position].credentialTitle, orgAddressToCredentials[_credentialOrgAddress][_position].credentialDivision);    
         } else {
-            emit CredentialFactoryActivity(_credentialOrgAddress, "", "selectCredential: Credential Bounds Error");
+            emit CredentialFactoryEvent(_credentialOrgAddress, "", "selectCredential: Credential Bounds Error");
             return ("","","");
         }
     }
