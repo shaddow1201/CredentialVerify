@@ -18,22 +18,26 @@ class App extends Component {
       storageValue: 0,
       web3: null,
       account: null,
-      credentialOrgCount: null,
-      credentialCount: null,
-      isCredentialOrg : null,
-      schoolShortName : null,
-      officialSchoolName: null,
-      schoolAddress : 0,
-      detail : null,
-      applicantZCount: null,
       credentialOrgFactoryContract: null,
       credentialFactoryContract: null,
       applicantFactoryContract: null,
       processApplicantContract: null,
+      isCredentialOrg : null,
+      credentialOrgCount: null,
+      schoolShortName : null,
+      officialSchoolName: null,
+      schoolAddress : 0,
+      credentialCount: null,
+      applicantCount: null,
+      detail : null,
       createCredentialOrgShortName: "",
       createCredentialOrgOfficialSchoolName: "",
       createCredentialOrgSchoolAddress: ""
-    }
+    };
+    //this.createOrgShortNameChange.bind(this);
+    //this.createOrgOfficialNameChange.bind(this);
+    //this.createOrgSchoolAddress.bind(this);
+    
   }
 
   componentWillMount() {
@@ -124,6 +128,7 @@ class App extends Component {
               return credentialFactoryInstance.selectOrgCredentialCount(this.state.account) 
             }).then ((result) => {
               this.setState({ credentialCount: result.c[0]})
+            }).then ((result) => {
               return applicantFactoryInstance.selectOrgApplicantCount(this.state.account)
             }).then ((result) => {
               this.setState({applicantCount: result.c[0]})
@@ -157,9 +162,18 @@ class App extends Component {
   createCredentialOrg(event){
     alert("Attempting Create");
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
-    var holder = this.state.web3.isAddress(this.state.createCredentialOrgSchoolAddress)
-    if (holder){
-      credentialOrgFactoryContract.createCredentialOrg(this.state.createCredentialOrgShortName, this.state.createCredentialOrgOfficialSchoolName, this.state.createCredentialOrgSchoolAddresst)
+    var checkBool = this.state.web3.isAddress(this.state.createCredentialOrgSchoolAddress)
+    var a,b,c;
+    
+    if (checkBool){
+      a = this.state.createCredentialOrgShortName;
+      b = this.state.createCredentialOrgOfficialSchoolName;
+      c = this.state.createCredentialOrgSchoolAddress
+
+      alert(a);
+      alert(b);
+      alert(c);
+      return credentialOrgFactoryContract.createCredentialOrg(a, b, c)
       .then(result => {
         alert(result);
         return credentialOrgFactoryContract.selectOrgCount()
@@ -168,6 +182,11 @@ class App extends Component {
         this.setState({credentialOrgCount: result.c[0]})
 
       })
+    } else {
+      alert("invalid address");
+      alert(a);
+      alert(b);
+      alert(c);
     }
   }
 
@@ -203,9 +222,9 @@ class App extends Component {
               CredentialOrg Applicant Count: {this.state.applicantCount}</p>
               <table>
                 <tbody>
-                <tr><td>School Short Name</td><td><input type="text" maxLength="30"  size="32" value={this.state.createCredentialOrgShortName} onChange={this.createOrgShortNameChange} /></td></tr>
-                <tr><td>School Official Name</td><td><input type="text" maxLength="70"  size="72" value={this.state.createCredentialOrgOfficialSchoolName} onChange={this.createOrgOfficialNameChange} /></td></tr>
-                <tr><td>School Address</td><td><input type="text" maxLength="42"  size="50" value={this.state.createCredentialOrgSchoolAddress} onChange={this.createOrgSchoolAddress} /></td></tr>
+                <tr><td>School Short Name</td><td><input type="text" maxLength="30"  size="32" value={this.state.createCredentialOrgShortName} onChange={this.createOrgShortNameChange.bind(this)} /></td></tr>
+                <tr><td>School Official Name</td><td><input type="text" maxLength="70"  size="72" value={this.state.createCredentialOrgOfficialSchoolName} onChange={this.createOrgOfficialNameChange.bind(this)} /></td></tr>
+                <tr><td>School Address</td><td><input type="text" maxLength="42"  size="50" value={this.state.createCredentialOrgSchoolAddress} onChange={this.createOrgSchoolAddress.bind(this)} /></td></tr>
                 </tbody>
               </table>
               <button onClick={this.createCredentialOrg.bind(this)}>Create Credential Org?</button>
