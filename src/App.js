@@ -51,8 +51,9 @@ class App extends Component {
       selectApplicantSSN: "",
       selectApplicantCID: "",
       selectApplicantFName: "",
-      selectApplicantLname: "",
-      selectApplicantPosition: 0
+      selectApplicantLName: "",
+      selectApplicantPosition: 0,
+      emitDetail: ""
     };
   }
 
@@ -104,7 +105,7 @@ class App extends Component {
         this.setState({ credentialOrgFactoryContract: credentialOrgFactoryInstance}, this.credentialOrgFactoryDetail);
         var credentialOrgFactoryEvent = credentialOrgFactoryInstance.CredentialOrgEvent();
         credentialOrgFactoryEvent.watch(function(err, result) {
-          alert("OMG, GOT A CREDENTIALORGFACTORY EVENT!!!");
+          //alert("OMG, GOT A CREDENTIALORGFACTORY EVENT!!!");
           console.log("result.args");
           console.log (result.args);
           if (err) {
@@ -113,7 +114,7 @@ class App extends Component {
           }
           //this.credentialOrgFactoryDetail(result.args.schoooAddress.c[0]);
           //console.log("SchoolAddress is: " + result.args.schoolAddress.c[0])
-          return this.setState({ createdSchoolAddress: ""});
+          return this.setState({ emitDetail: ""});
         }.bind(this));
 
       }).then((result) => {
@@ -122,15 +123,15 @@ class App extends Component {
           credentialFactoryInstance = instance;
           var credentialFactoryEvent = credentialFactoryInstance.CredentialEvent();
           credentialFactoryEvent.watch(function(err, result) {
-            alert("OMG, GOT A CREDENTIALFACTORY EVENT!!!");
+            //alert("OMG, GOT A CREDENTIALFACTORY EVENT!!!");
             console.log("result.args");
             console.log (result.args);
             if (err) {
               console.log(err);
               return;
             }
-            alert(result.args.schoolAddress.c[0]);
-            return this.setState({ createdSchoolAddress: result.args.schoolAddress.c[0]});
+            //alert(result.args.schoolAddress.c[0]);
+            return this.setState({ emitDetail: ""});
   
           }.bind(this));
     
@@ -142,7 +143,7 @@ class App extends Component {
             applicantFactoryInstance = instance;
             var applicantFactoryEvent = applicantFactoryInstance.ApplicantEvent();
             applicantFactoryEvent.watch(function(err, result) {
-              alert("OMG, GOT A APPLICANTFACTORY EVENT!!!");
+              //alert("OMG, GOT A APPLICANTFACTORY EVENT!!!");
               console.log("result.args");
               console.log (result.args);
               if (err) {
@@ -150,9 +151,8 @@ class App extends Component {
                 return;
               }
               // set the state of the contract
-              alert(result.args.schoolAddress.c[0]);
-              return this.setState({ createdSchoolAddress: result.args.schoolAddress.c[0]});
-    
+              //alert(result.args.schoolAddress.c[0]);
+              return this.setState({ emitDetail: ""})
             }.bind(this));
     
             return this.setState({ applicantFactoryContract: applicantFactoryInstance, account: accounts[0]}, this.applicantFactoryDetail);
@@ -166,8 +166,15 @@ class App extends Component {
             }).then((result) => {
               // Update state with the result.
               if (result){ 
+                if (this.state.account === accounts[0])
+                {
+                  // show all
+                } else {
+                  // hide create areas.
+                }
                 this.setState({ isCredentialOrg: "true" })
               } else {
+                // hide all but applicant.
                 this.setState({ isCredentialOrg: "false"})
               }
               return credentialFactoryInstance.selectOrgCredentialCount(this.state.account) 
@@ -191,6 +198,18 @@ class App extends Component {
     })
   }
 
+  credentialOrgOwnerShow(event){
+
+  }
+
+  credentialOrgShow(event){
+
+  }
+
+  applicantShow(event){
+
+  }
+
   credentialOrgFactoryDetail(event){
     console.log("Log Event: set CredentialOrgFactory Contract State");
   }
@@ -207,7 +226,7 @@ class App extends Component {
   //*  Create Credential Area   */
   //*************************** */
   createCredentialOrg(event){
-    alert("Attempting Create Credential Org");
+    //alert("Attempting Create Credential Org");
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
     var checkBool = this.state.web3.isAddress(this.state.createCredentialOrgSchoolAddress)
     
@@ -230,7 +249,7 @@ class App extends Component {
   }
 
   //*************************** */
-  //*  Select Credential Area   */
+  //*  Select CredentialOrg Area*/
   //*************************** */
   selectCredentialOrg(event){
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
@@ -245,22 +264,69 @@ class App extends Component {
       this.setState({selectCredentialOrgShortName: testVal[0], selectCredentialOrgOfficialSchoolName: testVal[1], selectCredentialOrgSchoolAddress: testVal[2]})
     })
   }
+  //*************************** */
+  //*  Create Credential Area   */
+  //*************************** */
   createCredential(event){
     const credentialFactoryContract = this.state.credentialFactoryContract
+    const account = this.state.account
+    return credentialFactoryContract.createCredential(this.state.createCredentialLevel, this.state.createCredentialTitle, this.state.createCredentialDivision, account) 
+    .then((result) => {
+      console.log(result.event)
+      if (typeof result === 'undefined'){
+          alert("insert failure")
+        }
+      return credentialFactoryContract.selectOrgCredentialCount()
+    }).then ((result) => {
+        //alert(result.c[0])
+        this.setState({credentialCount: result.c[0]})
+    })
   }
-
+  //*************************** */
+  //*  Select Credential Area   */
+  //*************************** */
   selectCredential(event){
     const credentialFactoryContract = this.state.credentialFactoryContract
-  }
+    const account = this.state.account
+    return credentialFactoryContract.selectCredential(account, this.state.selectCredentialPosition)
+    .then((result) => {
+      console.log(result);
+      var testVal = result.toString().split(",");
+      this.setState({selectCredentialLevel: testVal[0], selectCredentialTitle: testVal[1], selectCredentialDivision: testVal[2]})
+    })
 
+  }
+  //*************************** */
+  //*  Select Applicant Area   */
+  //*************************** */
   selectApplicant(event){
     const applicantFactoryContract = this.state.applicantFactoryContract
+    const account = this.state.account
+    return applicantFactoryContract.selectApplicantByOrgAndPosition(account, this.state.selectApplicantPosition)
+    .then((result) => {
+      console.log(result);
+      var testVal = result.toString().split(",");
+      this.setState({selectApplicantAddress: testVal[0], selectApplicantSSN: testVal[1], selectApplicantCID: testVal[2], selectApplicantFName: testVal[3], selectApplicantLName: testVal[4]})
+    })
   }
 
 
   //*************************** */
   //*  Helper onChange functions*/
   //*************************** */
+
+  createCredentialLeveChange(event){
+    this.setState({createCredentialLevel: event.target.value});
+  }
+  createCredentialTitleChange(event){
+    this.setState({createCredentialTitle: event.target.value});
+  }
+  createCredentialDivisionChange(event){
+    this.setState({createCredentialDivision: event.target.value});
+  }
+  createcredentialAddressChange(event){
+    this.setState({createcredentialOrgAddress: event.target.value});
+  }
   selectApplicantLocation(event){
     this.setState({selectApplicantPosition: event.target.value});
   }
@@ -281,7 +347,9 @@ class App extends Component {
   }
 
 
+
   render() {
+
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
@@ -291,39 +359,28 @@ class App extends Component {
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">
-              <h1>Welcome to Credential Verify!</h1>
+            
               <div>
-              <table width="500">
+              <table width="800">
                 <tbody>
-                <tr><td><h3>Color Legend</h3></td></tr>  
-                <tr><td><font color="blue">CredentialOrgFactory contract Data</font></td></tr>
-                <tr><td><font color="red">CredentialFactory contract Data</font></td></tr>
-                <tr><td><font color="green">ApplicantFactory contract Data</font></td></tr>
+                <tr><td><h1>Welcome to Credential Verify!</h1></td><td><h4>Legend</h4><font color="blue">CredentialOrgFactory Contract</font><br/><font color="red">CredentialFactory Contract</font><br/><font color="green">ApplicantFactory Contract</font></td></tr>
                 </tbody>
               </table><br/>
-              
-
               </div>
+              <hr/>
               <div>
+                <h3>Base Lookup</h3>
                 <font color="blue">CurrentAccount isCredentialOrg: {this.state.isCredentialOrg}</font><br/>
-                <font color="blue">Total Credential Orgs: {this.state.credentialOrgCount}</font><br/>
                 <font color="blue">School ShortName: {this.state.schoolShortName}</font><br/>
                 <font color="blue">School Official Name: {this.state.officialSchoolName}</font><br/>
                 <font color="blue">SchoolAddress: {this.state.schoolAddress}</font><br/>
               </div>
-              <div style={{borderColor: "blue", borderWidth: "1px"}}>
-                <table>
-                  <tbody>
-                  <tr><td><font color="blue">Create Credential Org</font></td><td></td></tr>
-                  <tr><td><font color="blue">School Short Name</font></td><td><input type="text" maxLength="30"  size="32" value={this.state.createCredentialOrgShortName} onChange={this.createOrgShortNameChange.bind(this)} /></td></tr>
-                  <tr><td><font color="blue">School Official Name</font></td><td><input type="text" maxLength="70"  size="72" value={this.state.createCredentialOrgOfficialSchoolName} onChange={this.createOrgOfficialNameChange.bind(this)} /></td></tr>
-                  <tr><td><font color="blue">School Address</font></td><td><input type="text" maxLength="42"  size="50" value={this.state.createCredentialOrgSchoolAddress} onChange={this.createOrgSchoolAddress.bind(this)} /></td></tr>
-                  </tbody>
-                </table>
-                <button onClick={this.createCredentialOrg.bind(this)}>Create Credential Org</button>
-              </div>
+              <hr/>
               <div>
-                <font color="blue">Select CredentialOrg</font>
+                <h2>Credential Org Interaction Section</h2>
+                <font color="blue">Total Credential Orgs: {this.state.credentialOrgCount}</font><br/>
+                <div>
+                <h3>Select CredentialOrg</h3>
                 <table>
                   <tbody>
                   <tr><td><font color="blue">Select Credential Org</font></td><td>&nbsp;&nbsp; Position: <input type="text" maxLength="5"  size="5" value={this.state.selectCredentialOrgPosition} onChange={this.selectOrgLocation.bind(this)}/></td></tr>
@@ -333,22 +390,23 @@ class App extends Component {
                   </tbody>
                 </table>
                 <button onClick={this.selectCredentialOrg.bind(this)}>Select CredentialOrg</button>
-              </div>  
-              <div>
-                <font color="red">Credential Count: {this.state.credentialCount}</font><br/>
-              </div>
-              <div><font color="red">Insert Credential</font>
+                </div>  
+                <div>
                 <table>
                   <tbody>
-                  <tr><td><font color="red">Credential Level</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.createCredentialLevel}/></td></tr>
-                  <tr><td><font color="red">Credential Title</font></td><td><input type="text" maxLength="70"  size="72" value={this.state.createCredentialTitle} /></td></tr>
-                  <tr><td><font color="red">CredentialDivision</font></td><td><input type="text" maxLength="50"  size="55" value={this.state.createCredentialDivision}/></td></tr>
-                  <tr><td><font color="red">OrgAddress</font></td><td><input type="text" maxLength="42"  size="50" value={this.state.createcredentialOrgAddress}/></td></tr>
+                  <tr><td><h3>Create Credential Org</h3></td><td></td></tr>
+                  <tr><td><font color="blue">School Short Name</font></td><td><input type="text" maxLength="30"  size="32" value={this.state.createCredentialOrgShortName} onChange={this.createOrgShortNameChange.bind(this)} /></td></tr>
+                  <tr><td><font color="blue">School Official Name</font></td><td><input type="text" maxLength="70"  size="72" value={this.state.createCredentialOrgOfficialSchoolName} onChange={this.createOrgOfficialNameChange.bind(this)} /></td></tr>
+                  <tr><td><font color="blue">School Address</font></td><td><input type="text" maxLength="42"  size="50" value={this.state.createCredentialOrgSchoolAddress} onChange={this.createOrgSchoolAddress.bind(this)} /></td></tr>
                   </tbody>
                 </table>
-                <button onClick={this.createCredential.bind(this)}>Create Credential</button>
+                <button onClick={this.createCredentialOrg.bind(this)}>Create Credential Org</button>
+                </div>
               </div>
-              <div><font color="red">Select Credential by Position</font>
+              <hr/>
+              <h2>Credential Interaction Section</h2>
+              <font color="red">Credential Count: {this.state.credentialCount}</font><br/>
+              <div><h3>Select Credential by Position</h3>
                 <table>
                   <tbody>
                   <tr><td><font color="red">Select Credential</font></td><td>&nbsp;&nbsp; Position: <input type="text" maxLength="5"  size="5" value={this.state.selectCredentialPosition} onChange={this.selectCredentialLocation.bind(this)}/></td></tr>
@@ -359,19 +417,32 @@ class App extends Component {
                 </table>
                 <button onClick={this.selectCredential.bind(this)}>Select Credential</button>
               </div>
+              <div><h3>Insert Credential</h3>
+                <table>
+                  <tbody>
+                  <tr><td><font color="red">Credential Level</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.createCredentialLevel} onChange={this.createCredentialLeveChange.bind(this)}/></td></tr>
+                  <tr><td><font color="red">Credential Title</font></td><td><input type="text" maxLength="70"  size="72" value={this.state.createCredentialTitle} onChange={this.createCredentialTitleChange.bind(this)}/></td></tr>
+                  <tr><td><font color="red">CredentialDivision</font></td><td><input type="text" maxLength="50"  size="55" value={this.state.createCredentialDivision} onChange={this.createCredentialDivisionChange.bind(this)}/></td></tr>
+                  <tr><td><font color="red">OrgAddress</font></td><td><input type="text" maxLength="42"  size="50" value={this.state.createcredentialOrgAddress} onChange={this.createcredentialAddressChange.bind(this)}/></td></tr>
+                  </tbody>
+                </table>
+                <button onClick={this.createCredential.bind(this)}>Create Credential</button>
+              </div>
+              <hr/>
               <div>
+                <h2>Applicant Interaction Section</h2>
                 <font color="green">CredentialOrg Applicant Count: {this.state.applicantCount}</font>
               </div>
               <div>
-                <font color="green">Select Applicant By Position</font>
+                <h3>Select Applicant By Position</h3>
                 <table>
                   <tbody>
                   <tr><td><font color="green">Select Applicant</font></td><td>&nbsp;&nbsp; Position: <input type="text" maxLength="5"  size="5" value={this.state.selectApplicantPosition} onChange={this.selectApplicantLocation.bind(this)}/></td></tr>
                   <tr><td><font color="green">OrgAddress</font></td><td><input type="text" maxLength="42"  size="50" value={this.state.selectApplicantAddress}/></td></tr>
-                  <tr><td><font color="green">Credential Level</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantSSN}/></td></tr>
-                  <tr><td><font color="green">Credential Level</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantCID}/></td></tr>
-                  <tr><td><font color="green">Credential Level</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantFName}/></td></tr>
-                  <tr><td><font color="green">Credential Level</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantLname}/></td></tr>
+                  <tr><td><font color="green">SSN</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantSSN}/></td></tr>
+                  <tr><td><font color="green">CollegeID</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantCID}/></td></tr>
+                  <tr><td><font color="green">First Name</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantFName}/></td></tr>
+                  <tr><td><font color="green">Last Name</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantLName}/></td></tr>
                   </tbody>
                 </table>
                 <button onClick={this.selectApplicant.bind(this)}>Select Credential</button>
