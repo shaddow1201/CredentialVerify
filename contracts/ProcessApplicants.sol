@@ -117,7 +117,7 @@ contract ProcessApplicants is Pausable {
         return (studentAddress, SSN, collegeStudentID, firstName, lastName, insertDate);
     }
     /**
-    * @dev Allows credentialOrg to select next Applicant (or sends back blank of not available/error)
+    * @dev updates the Applicant position to the next position.
     */
     function moveToNextApplicant()
     public

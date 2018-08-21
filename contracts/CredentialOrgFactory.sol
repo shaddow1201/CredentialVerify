@@ -118,6 +118,7 @@ contract CredentialOrgFactory is Pausable {
     public view 
     returns (string shortName, string officialSchoolName, address schoolAddress)
     {
+        emit CredentialOrgEvent(_credentialOrgAddress, "selectCredentialOrg (PRE)");
         require(_credentialOrgAddress != 0, "selectCredentialOrg - Address 0 not valid");
         CredentialOrg memory testCred = addressToCredentialOrg[_credentialOrgAddress];
         if (testCred.schoolAddress != 0){
