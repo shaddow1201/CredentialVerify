@@ -445,7 +445,7 @@ class App extends Component {
                   <tr><td><font color="green">Last Name</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantLName}/></td></tr>
                   </tbody>
                 </table>
-                <button onClick={this.selectApplicant.bind(this)}>Select Credential</button>
+                <button onClick={this.selectApplicant.bind(this)}>Select Applicant</button>
               </div>
             </div>
           </div>
