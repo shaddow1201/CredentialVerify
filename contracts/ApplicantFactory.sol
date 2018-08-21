@@ -151,7 +151,7 @@ contract ApplicantFactory is Pausable {
     returns (bool updateSuccess)
     {
         updateSuccess = false;
-        emit ApplicantDetail(msg.sender, "updateApplicantByOrgAndPosition (ATTEMPT)");
+        emit ApplicantEvent(msg.sender, "updateApplicantByOrgAndPosition (ATTEMPT)");
         require(_position >= 0, "updateApplicantByOrgAndPosition: Applicant position requires >= 0");
         require(bytes(_processDetail).length >= 0 && bytes(_processDetail).length <= 10, "updateApplicantByOrgAndPosition: Applicant Process Detail Missing");
         cof = CredentialOrgFactory(credentialOrgContractAddress);

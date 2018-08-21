@@ -35,10 +35,10 @@ module.exports = async function(deployer, accounts) {
     console.log("CredentialOrg Recs, owner, address of CredentialFactory, ApplicantFactory, and ProcessApplicants"),
     aInst.createCredentialOrg("INITRECORD", "BASE INIT RECORD", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
     // Grant access to all contracts (for isCredentialOrg)  
-    // this doesn't quite acomplish what i'm trying to get done... as modifer onlyBy(msg.sender) still fails..
-    //aInst.createCredentialOrg("CREDENTIAL", "CREDENTIALFACTORY", bInst.address),
-    //aInst.createCredentialOrg("APPLICANT", "APPLICANTFACTORY", cInst.address),
-    //aInst.createCredentialOrg("PROCESS", "PROCESSAPPLICANTS", dInst.address),
+    // this doesn't quite acomplish what i'm trying to get done... as modifer onlyBy(msg.sender) to allow the contract themselves to call the functions.
+    aInst.createCredentialOrg("CREDENTIAL", "CREDENTIALFACTORY", bInst.address),
+    aInst.createCredentialOrg("APPLICANT", "APPLICANTFACTORY", cInst.address),
+    aInst.createCredentialOrg("PROCESS", "PROCESSAPPLICANTS", dInst.address),
     
     // Set Address of bInst so it can point at aInst
     console.log("setAddress CredentialFactory: for CredentialOrgFactory"),

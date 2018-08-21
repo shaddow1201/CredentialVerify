@@ -106,16 +106,23 @@ contract ProcessApplicants is Pausable {
     {
         if (af.selectOrgApplicantCount(msg.sender) >= credentailOrgToApplicantPosition[msg.sender]){
             (studentAddress, SSN, collegeStudentID, firstName, lastName) = af.selectApplicantByOrgAndPosition(msg.sender, credentailOrgToApplicantPosition[msg.sender]);
-            credentailOrgToApplicantPosition[msg.sender] = credentailOrgToApplicantPosition[msg.sender].add(1);
         } else {
             studentAddress = 0;
             SSN = "";
             collegeStudentID = "";
             firstName = "";
             lastName = "";
-            emit ProcessCredentialDetail (msg.sender, "selectCredentialOrgNextApplicant (FAIL) No Applicants to Process.");
+            emit ProcessCredentialEvent (msg.sender, "selectCredentialOrgNextApplicant (FAIL) No Applicants to Process.");
         }
         return (studentAddress, SSN, collegeStudentID, firstName, lastName, insertDate);
+    }
+    /**
+    * @dev Allows credentialOrg to select next Applicant (or sends back blank of not available/error)
+    */
+    function moveToNextApplicant()
+    public
+    {
+        credentailOrgToApplicantPosition[msg.sender] = credentailOrgToApplicantPosition[msg.sender].add(1);
     }
 
     /**

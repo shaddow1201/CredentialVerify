@@ -2,7 +2,7 @@ pragma solidity ^0.4.21;
 
 /**
  * @title CredentialOrgFactory
- * @dev The CredentialOrgFactory allows the contract owner to add new credentialing orgs
+ * @dev The CredentialOrgFactory allows the contract owner to add new and interact with credentialing orgs
  */
 import "./Pausable.sol";
 import "./SafeMath32.sol";

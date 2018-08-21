@@ -37,7 +37,7 @@ class App extends Component {
       selectCredentialOrgShortName: "",
       selectCredentialOrgOfficialSchoolName: "",
       selectCredentialOrgSchoolAddress: "",
-      selectCredentialOrgPosition: 0
+      selectCredentialOrgPosition: "0"
     };
   }
 
@@ -116,15 +116,19 @@ class App extends Component {
               console.log(err);
               return;
             }
+            alert(result.args.schoolAddress.c[0]);
+            return this.setState({ createdSchoolAddress: result.args.schoolAddress.c[0]});
   
+          }.bind(this));
+    
           // set the state of the contract
-          return this.setState({ credentialFactoryContract: credentialFactoryInstance, account: accounts[0], accountCheckSummed: this.state.web3.toChecksumAddress(accounts[0])}, this.credentialFactoryDetail);
+          return this.setState({ credentialFactoryContract: credentialFactoryInstance, account: accounts[0]}, this.credentialFactoryDetail);
         }).then((result) => {
           //console.log(result);
           applicantFactory.deployed().then((instance) => {
             applicantFactoryInstance = instance;
             var applicantFactoryEvent = applicantFactoryInstance.ApplicantEvent();
-            credentialFactoryEvent.watch(function(err, result) {
+            applicantFactoryEvent.watch(function(err, result) {
               alert("OMG, GOT A APPLICANTFACTORY EVENT!!!");
               console.log("result.args");
               console.log (result.args);
@@ -133,6 +137,11 @@ class App extends Component {
                 return;
               }
               // set the state of the contract
+              alert(result.args.schoolAddress.c[0]);
+              return this.setState({ createdSchoolAddress: result.args.schoolAddress.c[0]});
+    
+            }.bind(this));
+    
             return this.setState({ applicantFactoryContract: applicantFactoryInstance, account: accounts[0]}, this.applicantFactoryDetail);
           }).then((result) =>{
             //console.log(result);
@@ -207,21 +216,19 @@ class App extends Component {
 
   selectCredentialOrg(event){
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
+    const account = this.state.account
     alert("looking up position: " + this.state.selectCredentialOrgPosition + " :credentialOrgCount: " + this.state.credentialOrgCount)
-    if (this.state.selectCredentialPosition > this.state.credentialOrgCount){
-      return credentialOrgFactoryContract.selectCredentialOrgByPosition(this.state.selectCredentialOrgPosition)
-      .then(result => {
-        console.log(this.state.selectCredentialPosition)
-        console.log(result.event)
-        if (typeof result !== 'undefined'){
-          this.setState({selectCredentialOrgShortName: result.c[0], selectCredentialOrgOfficialSchoolName: result.c[1], selectCredentialOrgSchoolAddress: result.c})
-        } else {
-          alert("select failure")
-        }
-      })
-    } else {
-      console.log("Lookup Not attempted outside must be less than " + this.state.credentialOrgCount);
-    }
+    console.log(this.state.selectCredentialOrgPosition)
+    return credentialOrgFactoryContract.selectCredentialOrgByPosition(this.state.selectCredentialOrgPosition)
+    .then(result => {
+      console.log(this.state.selectCredentialPosition)
+      console.log(result.event)
+      if (typeof result !== 'undefined'){
+        this.setState({selectCredentialOrgShortName: result.c[0], selectCredentialOrgOfficialSchoolName: result.c[1], selectCredentialOrgSchoolAddress: result.c})
+      } else {
+        alert("select failure")
+      }
+    })
   }
 
   selectOrgLocation(event){
@@ -255,7 +262,7 @@ class App extends Component {
                 <tr><td><h3>Color Legend</h3></td></tr>  
                 <tr><td><font color="blue">CredentialOrgFactory contract Data</font></td></tr>
                 <tr><td><font color="red">CredentialFactory contract Data</font></td></tr>
-                <tr><td><font color="green">CredentialOrgFactory contract Data</font></td></tr>
+                <tr><td><font color="green">ApplicantFactory contract Data</font></td></tr>
                 </tbody>
               </table><br/>
               
