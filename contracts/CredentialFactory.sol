@@ -35,7 +35,6 @@ contract CredentialFactory is Pausable{
     
     // address to allow communication with CredentialOrgFactory.
     address private credentialOrgContractAddress;
-
     CredentialOrgFactory cof;
     
     /**
@@ -62,8 +61,6 @@ contract CredentialFactory is Pausable{
     */
     function setAddress(address _credentialOrgContractAddress) public onlyOwner {
         credentialOrgContractAddress = _credentialOrgContractAddress;
-        cof = CredentialOrgFactory(credentialOrgContractAddress);
-
     }
 
     /**
@@ -77,7 +74,6 @@ contract CredentialFactory is Pausable{
     public onlyOwner whenNotPaused
     returns (bool insertStatus)
     {
-        emit CredentialEvent(msg.sender, _credentialTitle, "New Credential Add (ATTEMPT)");
         insertStatus = false;
         require(bytes(_credentialLevel).length > 0 && bytes(_credentialLevel).length < 50, "createCredential - Level length problem");
         require(bytes(_credentialTitle).length > 0 && bytes(_credentialTitle).length < 70, "createCredential - Title length problem");

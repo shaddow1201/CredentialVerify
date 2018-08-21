@@ -90,7 +90,7 @@ contract ApplicantFactory is Pausable {
         require(bytes(_firstName).length > 0 && bytes(_firstName).length <= 40, "createApplicant (FAIL) FirstName length problem"); 
         require(bytes(_lastName).length > 0 && bytes(_lastName).length <= 40, "createApplicant (FAIL) LastName length problem"); 
         cof = CredentialOrgFactory(credentialOrgContractAddress);
-        if (msg.sender == address(this) || cof.isCredentialOrg(_collegeAddress)){
+        if (cof.isCredentialOrg(_collegeAddress)){
             insertSuccess = false;
             uint32 position = uint32(orgAddressToApplicants[_collegeAddress].push(Applicant(msg.sender, _SSN, _collegeStudentID, _firstName, _lastName, uint32(block.timestamp), 0, "")));
             if(position >= 0){
@@ -147,7 +147,7 @@ contract ApplicantFactory is Pausable {
     * @return updateSuccess true/false
     */
     function updateApplicantByOrgAndPosition(uint32 _position, string _processDetail)
-    public onlyOwner whenNotPaused
+    public whenNotPaused
     returns (bool updateSuccess)
     {
         updateSuccess = false;
@@ -155,7 +155,7 @@ contract ApplicantFactory is Pausable {
         require(_position >= 0, "updateApplicantByOrgAndPosition: Applicant position requires >= 0");
         require(bytes(_processDetail).length >= 0 && bytes(_processDetail).length <= 10, "updateApplicantByOrgAndPosition: Applicant Process Detail Missing");
         cof = CredentialOrgFactory(credentialOrgContractAddress);
-        if (msg.sender == address(this) || cof.isCredentialOrg(msg.sender)){
+        if (cof.isCredentialOrg(msg.sender)){
             if (_position < orgAddressToApplicantCount[msg.sender]){
                 orgAddressToApplicants[msg.sender][_position].processDate = uint32(block.timestamp);
                 orgAddressToApplicants[msg.sender][_position].processDetail = _processDetail;

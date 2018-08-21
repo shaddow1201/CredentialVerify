@@ -1,9 +1,6 @@
 pragma solidity ^0.4.21;
 
-/**
- * @title CredentialOrgFactory
- * @dev The CredentialOrgFactory allows the contract owner to add new and interact with credentialing orgs
- */
+/** @title CredentialOrgFactory  */
 import "./Pausable.sol";
 import "./SafeMath32.sol";
 
@@ -15,7 +12,6 @@ contract CredentialOrgFactory is Pausable {
     mapping(address => CredentialOrg) addressToCredentialOrg;
     
     // events 
-    //event CredentialOrgCreateEvent(string shortName, address indexed schoolAddress, string detail);
     event CredentialOrgEvent(address indexed schoolAddress, string detail);
 
     // # of credentialling orgs created.
@@ -60,9 +56,9 @@ contract CredentialOrgFactory is Pausable {
     public onlyOwner whenNotPaused
     returns (bool createStatus)
     {
-        emit CredentialOrgEvent(_schoolAddress, "createCredentialOrg (PRE)");
+        //emit CredentialOrgEvent(_schoolAddress, "createCredentialOrg (PRE)");
         require(bytes(_shortName).length > 0 && bytes(_shortName).length < 31, "createCredentialOrg shortName problem");
-        require(bytes(_officialSchoolName).length > 0 && bytes(_officialSchoolName).length < 70, "createCredentialOrg officalSchoolName length problem");
+        require(bytes(_officialSchoolName).length > 0 && bytes(_officialSchoolName).length < 70, "createCredentialOrg officalSchoolName problem");
         require(_schoolAddress != 0, "createCredentialOrg (FAIL) school Address can not be 0");        
         createStatus = false;
 
@@ -118,7 +114,7 @@ contract CredentialOrgFactory is Pausable {
     public view 
     returns (string shortName, string officialSchoolName, address schoolAddress)
     {
-        emit CredentialOrgEvent(_credentialOrgAddress, "selectCredentialOrg (PRE)");
+        //emit CredentialOrgEvent(_credentialOrgAddress, "selectCredentialOrg (PRE)");
         require(_credentialOrgAddress != 0, "selectCredentialOrg - Address 0 not valid");
         CredentialOrg memory testCred = addressToCredentialOrg[_credentialOrgAddress];
         if (testCred.schoolAddress != 0){
@@ -159,8 +155,6 @@ contract CredentialOrgFactory is Pausable {
     returns (uint32 returnOrgCount)
     {
         returnOrgCount = credentialOrgCount;
-        emit CredentialOrgEvent(msg.sender, "selectOrgCount - (SUCCESS)");
         return (returnOrgCount);
     }
-
 }

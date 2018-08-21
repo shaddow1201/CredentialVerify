@@ -49,7 +49,7 @@ contract ProcessApplicants is Pausable {
     */
     modifier onlyBy(address _credentialOrgAddress){
         uint32 foundAccount = 0;
-        if (cof.isCredentialOrg(msg.sender)){
+        if (cof.isCredentialOrg(_credentialOrgAddress)){
             foundAccount = 1;
         }
         require(foundAccount == 1,"Not Authorized CredentialOrg");

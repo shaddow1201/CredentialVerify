@@ -8,8 +8,10 @@ Credential Verify is intended to be an off-chain enterprise solution pointed at 
 1. CredentialOrgFactory.sol - allows the creation of CredentialOrgs.
 2. CredentialFactory.sol - allows creation of credentials.
 3. ApplicantFactory.sol - allows Applicants to apply to CredentialOrgs for Awarded Credentials
-4. ProcessApplicants.sol - allows Gathering of info from CredentialOrgFactory, CredentialFactory, and Applicant Factory.
-5. ***CredentialWriteOrDenyApplicant.sol - to be impliments in future
+4. ***ProcessApplicants.sol - allows Gathering of info from CredentialOrgFactory, CredentialFactory, and Applicant Factory. 
+    To be impliments in future.
+5. ***WriteCredential.sol - allows credentials to be written and Applicant updated.   
+    To be impliments in future.
 
 ## Getting Started
 
@@ -19,7 +21,7 @@ These instructions should allow a copy of the project up and running on your loc
 
 1. Truffle install - https://github.com/trufflesuite/truffle
 2. ganache-cli install - https://github.com/trufflesuite/ganache-cli
-3. project files (this git collection)
+3. project files (this git collection) in a local directory.
 4. MetaMask install - https://metamask.io/
 
 ### Installing
@@ -33,25 +35,30 @@ ganache-cli -port 8545 -m "delay film punch stool adult expect bulb grab clinic 
 
 3. Set Up MetaMask for project -
     import with seed phrase "delay film punch stool adult expect bulb grab clinic lawsuit clown amused"
-    (set your own password, this is a throw away for testing)
+    1. change the network to Private Network, set port to: 8545
+    2. This will set account[0] for you. (original credentialOrg added to contract)
+    3. copy the secret key for account[1] from the ganache-cli window, and add into MetaMask, (will be added in testing)
+    4. copy the secret key for account[2] from the ganache-cli window, and add into MetaMask (will be used to show applicant variation)
 
-    change the network to Private Network, set port to: 8545
-
-3. Compile truffle
-Compile the project in standard manner from where the file was unzipped.
+4. Compile truffle
+Compile the project in standard manner from the directory where the files are located.
 
 ```
 truffle compile
 ```
 
-3. Migrate
+5. Migrate
 Migrate the project to the blockchain.
 ```
 truffle migrate
 ```
 
-4. Tests
+6. Tests
 A series of solidity tests for the contract files, testing basic contract functionality.
+
+```
+truffle test
+```
 
 There are 22 tests with these contracts, and are as follows
 ##CredentialOrgFactory Tests
@@ -83,11 +90,8 @@ There are 22 tests with these contracts, and are as follows
 6. testSelectInvalidOrgApplicantCount - Checks a call to Applicant Count by a non credential org.
 
 
-Round 2 will include access control tightening through the use of modifiers, and javascript testing.
+I can think of many more tests beyond Unit testing and into Functional Testing, however my Javascript needs further work, before i can add some functional tests.  Round 2 will also include functional testing, and access control tightening through the use of modifiers beyond onlyOwner.
 
-```
-truffle test
-```
 
 ## Built With
 
@@ -95,7 +99,7 @@ truffle test
 * [ganache-cli](https://github.com/trufflesuite/ganache-cli) - Ganache-cli (command line)
 * [truffle react box]() - used as web app base.
 * [OpenZeppelin-Solidity](https://github.com/OpenZeppelin/openzeppelin-solidity) (Pausable.sol, Ownable.sol)
-* [CryptoZombies](http://cryptozombies.io) (SafeMath32.sol)
+* [CryptoZombies](http://cryptozombies.io) (SafeMath32.sol, was pared from.)
 
 ## Author
 Richard Noordam
