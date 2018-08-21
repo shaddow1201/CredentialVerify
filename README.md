@@ -90,7 +90,7 @@ There are 22 tests with these contracts, and are as follows
 6. testSelectInvalidOrgApplicantCount - Checks a call to Applicant Count by a non credential org.
 
 
-I can think of many more tests beyond Unit testing and into Functional Testing, however my Javascript needs further work, before i can add some functional tests.  Round 2 will also include functional testing, and access control tightening through the use of modifiers beyond onlyOwner.
+I can think of many more tests beyond Unit this basic unit testing and into Functional Testing, however, my Javascript needs further work (as it was stretched for the ReactBox), before i can add some functional tests.  Round 2 will also include functional testing (Javascript), and access control tightening through the use of modifiers beyond onlyOwner. (the reason that the contracts themselves are credentialling orgs is I'm going to attempt to limit access to the credentialOrg Group and the contracts themselves for createCredential).  Note: this is round one of likely three, before i'll be 'satisfied' with the final output.
 
 
 ## Built With

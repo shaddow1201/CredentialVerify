@@ -15,15 +15,15 @@ will be necessary to fully test and impliment modifiers.
 5. Poison Data - in each case you act on your own data, and no ether is transfered.  version 2 will use modifiers to 
 further limit downstream contracts through the use of isCredentialOrg function.
 
-6. Exposed functions - again since actors only act on their own data, and no ether is trasnfered, even if a bad actor does
+6. Exposed functions - again since actors only act on their own data, and no ether is transfered, even if a bad actor does
 call the function, it still doesn't interact with anyone elses data.  Further limiting using modifiers will occur in version 2
 and the upgrade to Javascript testing for more fucntional testing 
 
-7. Exposed Secrets
+7. Exposed Secrets - there are no secrets to keep in this org.
 
-8. Denial of Service/Dust Spam - this was mitigated by limiting length of user inputs.
+8. Denial of Service/Dust Spam - this was mitigated by limiting length of user inputs.  Further modifer work will be done for version 2.
 
-9. Miner Vulnerabilities - short term block timestamp is irrelevant to the application, is only used in a 'gross' manner.
+9. Miner Vulnerabilities - short term block timestamp is irrelevant to the application, is only used in a 'gross' time of insert.
 
 10. Malicious Creator - contract does not handle funds, nor is owner other than just an actor in the contract, owners primary 
 function is to allow credentialOrg into the app and unable to limit them (other than pausable).
@@ -34,9 +34,7 @@ function is to allow credentialOrg into the app and unable to limit them (other 
 
 13. Tx.Origin Problem - no use of Tx.origin.
 
-14. Solidity Function Signatures and Fallback Data Collisions
-
-********************************  fallback function implimentation.....
+14. Solidity Function Signatures and Fallback Data Collisions - contract does not receive ether, so no fallback is required.
 
 15. Incorrect use of Cryptography - no use of cryptography in contracts.
 

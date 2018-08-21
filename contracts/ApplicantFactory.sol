@@ -36,15 +36,15 @@ contract ApplicantFactory is Pausable {
         uint32 processDate;         // unix timestamp.
         string processDetail;       // AWARDED/DENIED
     }
+
     /**
     * @dev constructor.
      */
     constructor() public {
     }
     
-    // address of CredentialOrgFactory.
+    // address of CredentialOrgFactory, and class refreence
     address private credentialOrgContractAddress;
-
     CredentialOrgFactory cof;
 
     // functions
@@ -141,7 +141,7 @@ contract ApplicantFactory is Pausable {
     }
 
     /**
-    * @dev Allows Selection of Applicant by org and position.
+    * @dev Allows update of Applicant by org and position.
     * @param _position position in array of Applicant
     * @param _processDetail Applicant AWARDED/DENIED
     * @return updateSuccess true/false

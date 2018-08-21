@@ -30,6 +30,8 @@ class App extends Component {
       credentialCount: null,
       applicantCount: null,
       detail : null,
+      ownerAddress: "",
+      isOwner: "false",
       createCredentialOrgShortName: "",
       createCredentialOrgOfficialSchoolName: "",
       createCredentialOrgSchoolAddress: "",
@@ -55,6 +57,7 @@ class App extends Component {
       selectApplicantPosition: 0,
       emitDetail: ""
     };
+
   }
 
   componentWillMount() {
@@ -166,12 +169,6 @@ class App extends Component {
             }).then((result) => {
               // Update state with the result.
               if (result){ 
-                if (this.state.account === accounts[0])
-                {
-                  // show all
-                } else {
-                  // hide create areas.
-                }
                 this.setState({ isCredentialOrg: "true" })
               } else {
                 // hide all but applicant.
@@ -191,6 +188,13 @@ class App extends Component {
               return credentialOrgFactoryInstance.selectOrgCount()
             }).then ((result) => {
               this.setState({credentialOrgCount: result.c[0]})
+              return credentialOrgFactoryInstance.getOwner()
+            }).then ((result) => {
+              this.setState({ownerAddress: result})
+              if (this.state.ownerAddress === this.state.account){
+                this.setState({isOwner : "true" })
+              } else {
+              }
             })
           })
         })
@@ -200,13 +204,7 @@ class App extends Component {
 
   credentialOrgOwnerShow(event){
 
-  }
-
-  credentialOrgShow(event){
-
-  }
-
-  applicantShow(event){
+    //account = this.state.account
 
   }
 
@@ -370,13 +368,14 @@ class App extends Component {
               <hr/>
               <div>
                 <h3>Base Lookup</h3>
+                <font color="blue">CurrentAccount isOwner: {this.state.isOwner}</font><br/>
                 <font color="blue">CurrentAccount isCredentialOrg: {this.state.isCredentialOrg}</font><br/>
                 <font color="blue">School ShortName: {this.state.schoolShortName}</font><br/>
                 <font color="blue">School Official Name: {this.state.officialSchoolName}</font><br/>
                 <font color="blue">SchoolAddress: {this.state.schoolAddress}</font><br/>
               </div>
               <hr/>
-              <div>
+              <div >
                 <h2>Credential Org Interaction Section</h2>
                 <font color="blue">Total Credential Orgs: {this.state.credentialOrgCount}</font><br/>
                 <div>
@@ -400,7 +399,7 @@ class App extends Component {
                   <tr><td><font color="blue">School Address</font></td><td><input type="text" maxLength="42"  size="50" value={this.state.createCredentialOrgSchoolAddress} onChange={this.createOrgSchoolAddress.bind(this)} /></td></tr>
                   </tbody>
                 </table>
-                <button onClick={this.createCredentialOrg.bind(this)}>Create Credential Org</button>
+                <button onClick={this.createCredentialOrg.bind(this)} disabled={!this.state.isCredentialOrg}>Create Credential Org</button>
                 </div>
               </div>
               <hr/>
@@ -415,7 +414,7 @@ class App extends Component {
                   <tr><td><font color="red">CredentialDivision</font></td><td><input type="text" maxLength="50"  size="55" value={this.state.selectCredentialDivision}/></td></tr>
                   </tbody>
                 </table>
-                <button onClick={this.selectCredential.bind(this)}>Select Credential</button>
+                <button onClick={this.selectCredential.bind(this)} >Select Credential</button>
               </div>
               <div><h3>Insert Credential</h3>
                 <table>
@@ -426,7 +425,7 @@ class App extends Component {
                   <tr><td><font color="red">OrgAddress</font></td><td><input type="text" maxLength="42"  size="50" value={this.state.createcredentialOrgAddress} onChange={this.createcredentialAddressChange.bind(this)}/></td></tr>
                   </tbody>
                 </table>
-                <button onClick={this.createCredential.bind(this)}>Create Credential</button>
+                <button onClick={this.createCredential.bind(this)} disabled={!this.state.isCredentialOrg}>Create Credential</button>
               </div>
               <hr/>
               <div>
@@ -445,7 +444,7 @@ class App extends Component {
                   <tr><td><font color="green">Last Name</font></td><td><input type="text" maxLength="50"  size="32" value={this.state.selectApplicantLName}/></td></tr>
                   </tbody>
                 </table>
-                <button onClick={this.selectApplicant.bind(this)}>Select Applicant</button>
+                <button onClick={this.selectApplicant.bind(this)} disabled={!this.state.isCredentialOrg}>Select Applicant</button>
               </div>
             </div>
           </div>
