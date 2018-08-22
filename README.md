@@ -10,11 +10,11 @@ C. Retrieves applicants that have applied for credentials for that credentiallin
 
 ![Relation Image](./RelationImage.png?raw=true "Object Relations")
 
-It is mainly a proof of concept, that doesn't use ether except for gas, and focuses on 
+This project is mainly a proof of concept, that doesn't use ether except for gas, and focuses on 
 
-1. CredentialOrgFactory.sol - allows the creation of CredentialOrgs.
-2. CredentialFactory.sol - allows creation of credentials.
-3. ApplicantFactory.sol - allows Applicants to apply to CredentialOrgs for Awarded Credentials
+1. CredentialOrgFactory.sol - allowing the creation of CredentialOrgs.
+2. CredentialFactory.sol - allowing creation of credentials for a CredentialOrg
+3. ApplicantFactory.sol - allows Applicants to apply to CredentialOrgs.
 4. ***ProcessApplicants.sol - allows Gathering of info from CredentialOrgFactory, CredentialFactory, and Applicant Factory. 
     This has been coded and hand tested, but will need advanced functional testing in Javascript. I am considering a different route on this, and Write Credentials may be all that is needed.
 5. ***WriteCredential.sol - allows credentials to be written and Applicant updated.   
@@ -22,12 +22,11 @@ It is mainly a proof of concept, that doesn't use ether except for gas, and focu
 
 *** future implimentation
 
-
 ## Getting Started
 
-These instructions should allow a copy of the project up and running on your local machine for development and testing purposes.
+These prerequisites and repository files should allow a copy of the project up and running on your local machine for development and testing purposes.
 
-### Prerequisites
+### Prerequisites 
 
 1. Truffle install - https://github.com/trufflesuite/truffle
 
@@ -121,7 +120,6 @@ There are 22 tests with these contracts, and are as follows
 
 
 I can think of many more tests beyond Unit this basic unit testing and into Functional Testing, however, my Javascript needs further work (as it was stretched for the ReactBox), before i can add some functional tests.  Round 2 will also include functional testing (Javascript), and access control tightening through the use of modifiers beyond onlyOwner. Note: this is round one of likely three, before i'll be 'satisfied' with the final output.
-
 
 ## Built With
 

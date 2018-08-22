@@ -6,9 +6,9 @@ Credential Verify is intended to be an off-chain enterprise solution pointed at 
 1. Logic Bugs - solidity unit testing shows basic functionality works, enhanced javascript testing
 will be necessary to fully test and impliment modifiers.
 
-2. Failed Sends - no Ether transfer occur in the contract that are not gas payments.
+2. Failed Sends - no Ether transfers occur in the contract that are not gas payments.
 
-3. Re-entry - no ether transfers, as well as users only act on their own data, and can't change anothers.
+3. Re-entry - no ether transfers, as well as users only act on their own data, and can't change anothers data.
 
 4. Integer Arithmetic Overflow - Contract uses uint32 as a base type, and uses SafeMath32 library to cover that problem.
 
@@ -16,7 +16,7 @@ will be necessary to fully test and impliment modifiers.
 further limit downstream contracts through the use of isCredentialOrg function.
 
 6. Exposed functions - again since actors only act on their own data, and no ether is transfered, even if a bad actor does
-call the function, it still doesn't interact with anyone elses data.  Further limiting using modifiers will occur in version 2
+manage to call the function, it still doesn't interact with anyone elses data.  Further limiting using modifiers will occur in version 2
 and the upgrade to Javascript testing for more fucntional testing 
 
 7. Exposed Secrets - there are no secrets to keep in this org.
