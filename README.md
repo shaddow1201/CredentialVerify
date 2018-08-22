@@ -90,7 +90,7 @@ npm run start
 
 ## Tests
 There are 22 tests with these contracts, and are as follows
-###CredentialOrgFactory Tests
+### CredentialOrgFactory Tests  
 1. testCheckContractOwner - Checks Owner address vs expected, Makes sure that the contract was deployed to the correct owner.
 2. testSelectCredentialOrgCount -Tests to see if INIT records were created upon deploy.  Data existence check.
 3. testSelectCredentialOrgTestRecord -Tests to see if INIT record values were set correctly.  Data Value correctness checking.
@@ -102,7 +102,7 @@ There are 22 tests with these contracts, and are as follows
 9. testSelectValidCredentialOrgByAddress - Test to see if credentialling org can be looked up by valid credentialling org address
 10. testSelectInvalidCredentialOrgByAddress -Test to see if invalid credentialling org can be looked up by address (blank means no return values)
 
-###CredentialFactory Tests
+### CredentialFactory Tests
 1. testCheckContractOwner - Checks Owner address vs expected, Makes sure that the contract was deployed to the correct owner.
 2. testSelectValidOrgCredentialCount - Checks Valid CredentialOrg Credential Count, checks if inital conditions are correct from migration
 3. testSelectInvalidOrgCredentialCount - Checks Invalid CredentialOrg Credential Count, checks to see if return from invalid Org returns 0.
@@ -110,7 +110,7 @@ There are 22 tests with these contracts, and are as follows
 5. testInsertCredentialRecordTests to see if Credential Records can be inserted. limited to Owner atm).  A Local instance invoked to allow onlyOwner modifer to work.
 6. testSelectCredentialInsertedRecord - Tests to see if Credential Record just inserted's value was correct.   A Local instance invoked to allow onlyOwner modifer to work.
 
-###ApplicantFactory Tests
+### ApplicantFactory Tests
 1. testCheckContractOwner - Checks Owner address vs expected, Makes sure that the contract was deployed to the correct owner.
 2. testCreateApplicant - Checks to see if an Applicant can be created.
 3. testSelectValidApplicantByOrgAndPosition - Checks a Valid applicant by org and position (previous test created)
