@@ -351,7 +351,8 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link">Based on React's Truffle Box</a>
+            <a href="#" onClick="window.open('https://github.com/truffle-box/react-box')" className="pure-menu-heading pure-menu-link">Based on React's Truffle Box</a>
+            <a href="#" onClick="window.open('https://github.com/shaddow1201/CredentialVerify')" className="pure-menu-heading pure-menu-link">GitHub Repository</a>
         </nav>
 
         <main className="container">
