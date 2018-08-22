@@ -3,10 +3,10 @@
 Credential Verify is intended to be an off-chain enterprise solution pointed at cryptographically verifying Educational Institutions awarded credentials.  This is round of of probably 3 before completed.
 
 ## What it does
-It satisfies the following:
-A. There are Orgs that provide various credentials
-B. Allows these orgs to create their own credentials or have the owner do it for them.
-C. Retrieves applicants that have applied for credentials for that credentialling org.
+It satisfies the following:  
+A. There are Orgs that provide various credentials.  
+B. Allows these orgs to create their own credentials or have the owner do it for them.  
+C. Retrieves applicants that have applied for credentials for that credentialling org.  
 
 It is mainly a proof of concept, that doesn't use ether except for gas, and focuses on 
 
