@@ -10,7 +10,7 @@ C. Retrieves applicants that have applied for credentials for that credentiallin
 
 ![Relation Image](./RelationImage.png?raw=true "Object Relations")
 
-###This project is mainly a proof of concept, that doesn't use ether except for gas, and focuses on: 
+### This project is mainly a proof of concept, that doesn't use ether except for gas, and focuses on: 
 
 1. CredentialOrgFactory.sol - allowing the creation of CredentialOrgs.
 2. CredentialFactory.sol - allowing creation of credentials for a CredentialOrg
