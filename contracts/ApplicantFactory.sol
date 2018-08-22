@@ -92,7 +92,7 @@ contract ApplicantFactory is Pausable {
         cof = CredentialOrgFactory(credentialOrgContractAddress);
         if (cof.isCredentialOrg(_collegeAddress)){
             insertSuccess = false;
-            uint32 position = uint32(orgAddressToApplicants[_collegeAddress].push(Applicant(msg.sender, _SSN, _collegeStudentID, _firstName, _lastName, uint32(block.timestamp), 0, "")));
+            uint32 position = uint32(orgAddressToApplicants[_collegeAddress].push(Applicant(msg.sender, _SSN, _collegeStudentID, _firstName, _lastName, uint32(now), 0, "")));
             if(position >= 0){
                 insertSuccess = true;
                 applicantAddressToApplicantPosition[msg.sender] = position.sub(1);
@@ -102,7 +102,7 @@ contract ApplicantFactory is Pausable {
                 emit ApplicantEvent(msg.sender, "createApplicant (FAIL)");
             }
         } else {
-            emit ApplicantEvent(_collegeAddress, "createApplicant Failure, applied address NOT CredetialOrg");
+            emit ApplicantEvent(_collegeAddress, "createApplicant (FAIL) Colleg Applied to address NOT CredetialOrg");
         }
         return (insertSuccess);
     }

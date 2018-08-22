@@ -93,12 +93,12 @@ contract CredentialOrgFactory is Pausable {
         shortName = "";
         officialSchoolName = "";
         schoolAddress = 0;
-        require(_credentialOrgPosition >= 0, "selectCredentialOrg - position had to be greater or equal to 0.");
+        require(_credentialOrgPosition >= 0, "selectCredentialOrgByPosition - position had to be greater or equal to 0.");
         if (_credentialOrgPosition < credentialOrgCount){
-            emit CredentialOrgEvent(msg.sender, "selectCredentialOrg~position - (SUCCESS)");
+            emit CredentialOrgEvent(msg.sender, "selectCredentialOrgByPosition - (SUCCESS)");
             return (credentialOrgs[_credentialOrgPosition].shortName, credentialOrgs[_credentialOrgPosition].officialSchoolName, credentialOrgs[_credentialOrgPosition].schoolAddress);
         } else {
-            emit CredentialOrgEvent(msg.sender, "selectCredentialOrg~position - (FAIL) top boundry exceeded.");
+            emit CredentialOrgEvent(msg.sender, "selectCredentialOrgByPosition - (FAIL) top boundry exceeded.");
             return (shortName, officialSchoolName, schoolAddress);
         }
     }
@@ -115,13 +115,13 @@ contract CredentialOrgFactory is Pausable {
     returns (string shortName, string officialSchoolName, address schoolAddress)
     {
         //emit CredentialOrgEvent(_credentialOrgAddress, "selectCredentialOrg (PRE)");
-        require(_credentialOrgAddress != 0, "selectCredentialOrg - Address 0 not valid");
+        require(_credentialOrgAddress != 0, "selectCredentialOrgByAddress - Address 0 not valid");
         CredentialOrg memory testCred = addressToCredentialOrg[_credentialOrgAddress];
         if (testCred.schoolAddress != 0){
-            emit CredentialOrgEvent(_credentialOrgAddress, "selectCredentialOrg~address - (SUCCESS)");
+            emit CredentialOrgEvent(_credentialOrgAddress, "selectCredentialOrgByAddress (SUCCESS)");
             return (testCred.shortName, testCred.officialSchoolName, testCred.schoolAddress);
         } else {
-            emit CredentialOrgEvent(_credentialOrgAddress, "selectCredentialOrg~address - (FAIL)");
+            emit CredentialOrgEvent(_credentialOrgAddress, "selectCredentialOrgByAddress - (FAIL)");
             return ("", "", 0);
         }
     }

@@ -3,7 +3,15 @@
 body,
 .pure-g [class*=pure-u] {
   font-family: 'Open Sans', sans-serif;
+  font-size: 10;
+  background-color: rgb(224, 224, 224);
 }
+
+.section {
+  border : 1px solid black;
+  float: left  
+}
+
 
 h1, h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
