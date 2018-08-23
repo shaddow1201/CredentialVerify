@@ -90,6 +90,7 @@ contract CredentialFactory is Pausable{
         } else {
             emit CredentialEvent(_credentialOrgAddress, _credentialTitle, "createCredential (FAILED) must be owner or only modify your own records");
         }
+        return insertStatus;
     }
 
     /**

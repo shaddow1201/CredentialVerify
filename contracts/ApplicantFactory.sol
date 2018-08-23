@@ -57,6 +57,7 @@ contract ApplicantFactory is Pausable {
     returns (address returnedOwner)
     {
         returnedOwner = owner;
+        return returnedOwner;
     }
 
     /**

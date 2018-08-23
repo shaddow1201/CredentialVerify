@@ -121,9 +121,9 @@ class App extends Component {
           credentialFactoryInstance = instance;
           var credentialFactoryEvent = credentialFactoryInstance.CredentialEvent();
           credentialFactoryEvent.watch(function (err, result) {
-            //alert("OMG, GOT A CREDENTIALFACTORY EVENT!!!");
-            console.log("result.args");
-            console.log(result.args);
+            console.log("OMG, GOT A CREDENTIALFACTORY EVENT!!!");
+            //console.log("result.args");
+            //console.log(result.args);
             if (err) {
               console.log(err);
               return;
@@ -255,16 +255,14 @@ class App extends Component {
     const credentialFactoryContract = this.state.credentialFactoryContract
     const account = this.state.account
     return credentialFactoryContract.createCredential(this.state.createCredentialLevel, this.state.createCredentialTitle, this.state.createCredentialDivision, account)
-      .then((result) => {
-        console.log(result.event)
-        if (typeof result === 'undefined') {
-          alert("insert failure")
-        }
-        return credentialFactoryContract.selectOrgCredentialCount()
-      }).then((result) => {
-        //alert(result.c[0])
-        this.setState({ credentialCount: result.c[0] })
-      })
+    .then((result) => {
+      //alert(result.c[0])
+      console.log(result);
+      return credentialFactoryContract.selectOrgCredentialCount()
+    }).then((result) => {
+      console.log(result)
+      this.setState({ credentialCount: result })
+    })
   }
   //*************************** */
   //*  Select Credential Area   */
@@ -347,6 +345,7 @@ class App extends Component {
                     <tr><td><h1>Welcome to Credential Verify!</h1>
                       <section width="100%">
                         <b>Base Lookup</b><br />
+                        <font size="2">This is the current accounts details in relation to the blockchain.</font><br/>
                         <font color="blue">CurrentAccount isOwner: {this.state.isOwner}</font><br />
                         <font color="blue">CurrentAccount isCredentialOrg: {this.state.isCredentialOrg}</font><br />
                         <font color="blue">School ShortName: {this.state.schoolShortName}</font><br />
@@ -362,6 +361,7 @@ class App extends Component {
                 <h2>Credential Org Interaction Section</h2>
                 <font color="blue">Total Credential Orgs: {this.state.credentialOrgCount}</font><br />
                 <h3>Select CredentialOrg</h3>
+                <font size="2">The CredentialOrgFactory is prepopulated with 3 Accounts, (see the 2_deploy_contracts.js).<br/>Zero is prepopulated, so you can just click the Select Credential Org Button.<br/>  The array starts at zero, so the first array position is 0, then 1, and 2 for a total of 3 positions.</font><br/>
                 <section>
                   <table>
                     <tbody>
@@ -373,21 +373,25 @@ class App extends Component {
                   </table>
                   <button onClick={this.selectCredentialOrg.bind(this)}>Select CredentialOrg</button>
                 </section>
+                <section>
+                <h3>Create Credential Org</h3>
+                <font size="2">You can create your own credentialOrg as the owner.  Only the contract owner can acomplish this funciton.<br/>Fill out form with valid data (form should limit max), and submit!</font>
                 <table>
                   <tbody>
-                    <tr><td><h3>Create Credential Org</h3></td><td></td></tr>
                     <tr><td><font color="blue">School Short Name</font></td><td><input type="text" maxLength="30" size="32" value={this.state.createCredentialOrgShortName} onChange={this.createOrgShortNameChange.bind(this)} /></td></tr>
                     <tr><td><font color="blue">School Official Name</font></td><td><input type="text" maxLength="70" size="72" value={this.state.createCredentialOrgOfficialSchoolName} onChange={this.createOrgOfficialNameChange.bind(this)} /></td></tr>
                     <tr><td><font color="blue">School Address</font></td><td><input type="text" maxLength="42" size="50" value={this.state.createCredentialOrgSchoolAddress} onChange={this.createOrgSchoolAddressChange.bind(this)} /></td></tr>
                   </tbody>
                 </table>
                 <button onClick={this.createCredentialOrg.bind(this)} disabled={!this.state.isCredentialOrg}>Create Credential Org</button>
+                </section>
               </section>
               <hr />
               <h2>Credential Interaction Section</h2>
               <section>
                 <font color="red">Credential Count: {this.state.credentialCount}</font><br />
                 <h3>Select Credential by Position</h3>
+                <font size="2">The CredentialFactory is prepopulated with 4 Credentials, (see the 2_deploy_contracts.js).<br/> Zero is prepopulated, so you can just click the Select Credential Button.</font>
                 <table>
                   <tbody>
                     <tr><td><font color="red">Select Credential</font></td><td> <font color="red">Position:</font> <input type="text" maxLength="5" size="5" value={this.state.selectCredentialPosition} onChange={this.selectCredentialLocationChange.bind(this)} /></td></tr>
@@ -398,7 +402,9 @@ class App extends Component {
                 </table>
                 <button onClick={this.selectCredential.bind(this)} >Select Credential</button>
               </section>
-              <section><h3>Insert Credential</h3>
+              <section>
+                <h3>Insert Credential</h3>
+                <font size="2">You can create your own credential as the owner or the credentialOrg.  The owner can add to any,<br/>the credentialOrg can only act on/add to their records.  The owner access is intended to be a helper function<br/> for the CredentialOrgs.   Fill out form with valid data (form should limit max), and submit!</font>
                 <table>
                   <tbody>
                     <tr><td><font color="red">Credential Level</font></td><td><input type="text" maxLength="50" size="32" value={this.state.createCredentialLevel} onChange={this.createCredentialLevelChange.bind(this)} /></td></tr>
@@ -416,6 +422,7 @@ class App extends Component {
               </div>
               <div>
                 <h3>Select Applicant By Position</h3>
+                <font size="2">The ApplicantFactory is prepopulated with 5 Applicants, all applying to the owner CredentialOrg.<br/> (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Applicant Button.</font>
                 <table>
                   <tbody>
                     <tr><td><font color="green">Select Applicant</font></td><td>&nbsp;<font color="green">&nbsp;Position:</font> <input type="text" maxLength="5" size="5" value={this.state.selectApplicantPosition} onChange={this.selectApplicantLocationChange.bind(this)} /></td></tr>
