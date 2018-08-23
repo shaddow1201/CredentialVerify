@@ -8,6 +8,7 @@ A. Creation of CredentialOrgs that provide various credentials.
 B. Allows these orgs to create their own credentials or have the owner do it for them.  
 C. Retrieves applicants that have applied for credentials for that credentialling org.  
 
+
 ![Relation Image](./RelationImage.png?raw=true "Object Relations")
 
 ### This project is mainly a proof of concept, that doesn't use ether except for gas, and focuses on: 
@@ -50,7 +51,7 @@ Install MetaMask.  See above link for how to do this.
 2. run ganache-cli with following mnemonic "delay film punch stool adult expect bulb grab clinic lawsuit clown amused"
 
 ```
-ganache-cli -port 8545 -m "delay film punch stool adult expect bulb grab clinic lawsuit clown amused"
+ganache-cli --port 8545 --mnemonic "delay film punch stool adult expect bulb grab clinic lawsuit clown amused"
 ```
 
 3. Set Up MetaMask for project -

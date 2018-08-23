@@ -34,6 +34,7 @@ class App extends Component {
       // owner checks
       ownerAddress: "",
       isOwner: "false",
+      isApplicant: "true",
       // Create Credential Org Variables
       createCredentialOrgShortName: "",
       createCredentialOrgOfficialSchoolName: "",
@@ -42,7 +43,7 @@ class App extends Component {
       selectCredentialOrgShortName: "",
       selectCredentialOrgOfficialSchoolName: "",
       selectCredentialOrgSchoolAddress: "",
-      selectCredentialOrgPosition: "0",
+      selectCredentialOrgPosition: 0,
       // create Credential Variables
       createCredentialLevel: "",
       createCredentialTitle: "",
@@ -60,8 +61,7 @@ class App extends Component {
       selectApplicantCID: "",
       selectApplicantFName: "",
       selectApplicantLName: "",
-      selectApplicantPosition: 0,
-      emitDetail: ""
+      selectApplicantPosition: 0
     };
 
   }
@@ -103,63 +103,80 @@ class App extends Component {
     this.state.web3.eth.getAccounts((error, accounts) => {
       this.state.web3.eth.defaultAccount = accounts[0];
       credentialOrgFactory.deployed().then((instance) => {
+        // set contract instance for CredentialOrgFactory and set state
         credentialOrgFactoryInstance = instance;
         this.setState({ credentialOrgFactoryContract: credentialOrgFactoryInstance }, this.credentialOrgFactoryDetail);
+        //CredentialOrgFactory Watcher
         var credentialOrgFactoryEvent = credentialOrgFactoryInstance.CredentialOrgEvent();
         credentialOrgFactoryEvent.watch(function (err, result) {
-          //alert("OMG, GOT A CREDENTIALORGFACTORY EVENT!!!");
-          console.log("result.args");
-          console.log(result.args);
           if (err) {
             console.log(err);
             return;
+          } else {
+            console.log(result);
           }
-          return this.setState({ emitDetail: "" });
+          // do a CredentialOrg count update if event is captured 
+          return credentialOrgFactoryInstance.selectOrgCount()
+          .then ((result) => {
+            return this.setState({ credentialOrgCount: result.c[0] })
+          })
         }.bind(this));
       }).then((result) => {
         credentialFactory.deployed().then((instance) => {
+          // set contract instance for CredentialFactory
           credentialFactoryInstance = instance;
+          // Event watcher for CredentialFactory contract.
           var credentialFactoryEvent = credentialFactoryInstance.CredentialEvent();
           credentialFactoryEvent.watch(function (err, result) {
-            console.log("OMG, GOT A CREDENTIALFACTORY EVENT!!!");
-            //console.log("result.args");
-            //console.log(result.args);
             if (err) {
               console.log(err);
               return;
+            } else {
+              console.log(result);
             }
-            //alert(result.args.schoolAddress.c[0]);
-            return this.setState({ emitDetail: "" });
-
+            // do an Org CredentialCount update on event capture
+            return credentialFactoryInstance.selectOrgCredentialCount(this.state.account)
+            .then ((result) => {
+              return this.setState({ credentialCount: result.c[0] })
+            })
           }.bind(this));
-
           // set the state of the contract
           return this.setState({ credentialFactoryContract: credentialFactoryInstance, account: accounts[0] }, this.credentialFactoryDetail);
         }).then((result) => {
-          //console.log(result);
           applicantFactory.deployed().then((instance) => {
+            // assign contract instance.
             applicantFactoryInstance = instance;
+            // ApplicantFactory Event Watcher.
             var applicantFactoryEvent = applicantFactoryInstance.ApplicantEvent();
             applicantFactoryEvent.watch(function (err, result) {
-              //alert("OMG, GOT A APPLICANTFACTORY EVENT!!!");
-              console.log("result.args");
-              console.log(result.args);
               if (err) {
                 console.log(err);
                 return;
+              } else {
+                console.log(result);
               }
-              return this.setState({ emitDetail: "" })
+              // do an Org CredentialCount update on event capture
+              return applicantFactoryInstance.selectOrgApplicantCount(this.state.account)
+              .then ((result) => {
+                return this.setState({ credentialCount: result.c[0] })
+              })
             }.bind(this));
-            return this.setState({ applicantFactoryContract: applicantFactoryInstance, account: accounts[0] }, this.applicantFactoryDetail);
+            // Set state variables.
+            this.setState({ applicantFactoryContract: applicantFactoryInstance, account: accounts[0] }, this.applicantFactoryDetail);
+            return credentialOrgFactoryInstance.getOwner()
           }).then((result) => {
+            this.setState({ ownerAddress: result })
+            if (this.state.ownerAddress === this.state.account) {
+              this.setState({ isOwner: "true" })
+            }
             return credentialOrgFactoryInstance.isCredentialOrg(this.state.account);
           }).then((result) => {
-            // Update state with the result.
+            // Update state with the result. (display for now, but future update visible states.)
             if (result) {
-              this.setState({ isCredentialOrg: "true" })
+              this.setState({ isCredentialOrg: "true", isApplicant: "false" })
             } else {
               // hide all but applicant.
-              this.setState({ isCredentialOrg: "false" })
+              this.setState({ isCredentialOrg: "false", isApplicant: "true" })
             }
             return credentialFactoryInstance.selectOrgCredentialCount(this.state.account)
           }).then((result) => {
@@ -175,13 +192,6 @@ class App extends Component {
             return credentialOrgFactoryInstance.selectOrgCount()
           }).then((result) => {
             this.setState({ credentialOrgCount: result.c[0] })
-            return credentialOrgFactoryInstance.getOwner()
-          }).then((result) => {
-            this.setState({ ownerAddress: result })
-            if (this.state.ownerAddress === this.state.account) {
-              this.setState({ isOwner: "true" })
-            } else {
-            }
           })
         })
       })
@@ -189,9 +199,24 @@ class App extends Component {
   }
 
   credentialOrgOwnerShow(event) {
-
+    // TODO  visibility items for owner
     //account = this.state.account
+    if(this.state.isOwner === "true"){
+      // show create Credential Org
+    } else {
+      // hide create Credential Org
+    }
+  }
 
+  credentialOrgShow(event) {
+    if(this.state.isCredentialOrg === "true"){
+      // show credentialCreate
+      // hide applicantcreate
+      // show applicant Lookup
+    } else {
+      // hide credential Create
+      // hide applicant lookup.
+    }
   }
 
   credentialOrgFactoryDetail(event) {
@@ -203,32 +228,25 @@ class App extends Component {
   applicantFactoryDetail(event) {
     console.log("Log Event: set ApplicantFactory Contract State");
   }
-  processApplicantsDetail(event) {
-    console.log("Log Event: set ProcessApplicants Contract State");
-  }
+
   //*************************** */
   //*  Create Credential Area   */
   //*************************** */
   createCredentialOrg(event) {
     //alert("Attempting Create Credential Org");
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
-    var checkBool = this.state.web3.isAddress(this.state.createCredentialOrgSchoolAddress)
 
-    if (checkBool) {
+    if (this.state.web3.isAddress(this.state.createCredentialOrgSchoolAddress)) {
       //console.log(JSON.stringify(this.state.createCredentialOrgSchoolAddress))
       return credentialOrgFactoryContract.createCredentialOrg(this.state.createCredentialOrgShortName, this.state.createCredentialOrgOfficialSchoolName, this.state.createCredentialOrgSchoolAddress)
         .then((result) => {
-          console.log(result.event)
+          console.log(result.args)
           if (typeof result === 'undefined') {
             alert("insert failure")
           }
-          return credentialOrgFactoryContract.selectOrgCount()
-        }).then((result) => {
-          //alert(result.c[0])
-          this.setState({ credentialOrgCount: result.c[0] })
         })
     } else {
-      console.log("Invalid address attempted.  No attempt.");
+      console.log("Invalid accounts[0]/account address attempted.  No attempt.");
     }
   }
 
@@ -237,16 +255,23 @@ class App extends Component {
   //*************************** */
   selectCredentialOrg(event) {
     const credentialOrgFactoryContract = this.state.credentialOrgFactoryContract
-    //const account = this.state.account
-    //alert("looking up position: " + this.state.selectCredentialOrgPosition + " :credentialOrgCount: " + this.state.credentialOrgCount)
-    //console.log(this.state.selectCredentialOrgPosition)
-    //return credentialOrgFactoryContract.selectCredentialOrgByPosition(this.state.selectCredentialOrgPosition)
-    return credentialOrgFactoryContract.selectCredentialOrgByPosition(this.state.selectCredentialOrgPosition)
+    var checkVal;
+    try{
+      checkVal = parseInt(this.state.selectCredentialOrgPosition,10);
+    } catch (e) {
+      console.log(e)
+      checkVal = "";
+    }
+    if (Number.isInteger(checkVal)){
+      return credentialOrgFactoryContract.selectCredentialOrgByPosition(this.state.selectCredentialOrgPosition)
       .then((result) => {
         console.log(result);
         var testVal = result.toString().split(",");
         this.setState({ selectCredentialOrgShortName: testVal[0], selectCredentialOrgOfficialSchoolName: testVal[1], selectCredentialOrgSchoolAddress: testVal[2] })
       })
+    } else {
+      alert("Please enter an Integer value for the CredentialOrg Lookup Position.  No lookup attempted.");
+    }
   }
   //*************************** */
   //*  Create Credential Area   */
@@ -254,15 +279,17 @@ class App extends Component {
   createCredential(event) {
     const credentialFactoryContract = this.state.credentialFactoryContract
     const account = this.state.account
-    return credentialFactoryContract.createCredential(this.state.createCredentialLevel, this.state.createCredentialTitle, this.state.createCredentialDivision, account)
-    .then((result) => {
-      //alert(result.c[0])
-      console.log(result);
-      return credentialFactoryContract.selectOrgCredentialCount()
-    }).then((result) => {
-      console.log(result)
-      this.setState({ credentialCount: result })
-    })
+    if (this.state.web3.isAddress(account)){
+      //console.log(JSON.stringify(account)
+      return credentialFactoryContract.createCredential(this.state.createCredentialLevel, this.state.createCredentialTitle, this.state.createCredentialDivision, account)
+      .then((result) => {
+        console.log(result.args)
+        //alert(result.c[0])
+        console.log(result);
+      })
+    } else {
+      alert("accounts[0]/account is not a valid address.  No create attempted.");
+    }
   }
   //*************************** */
   //*  Select Credential Area   */
@@ -270,13 +297,23 @@ class App extends Component {
   selectCredential(event) {
     const credentialFactoryContract = this.state.credentialFactoryContract
     const account = this.state.account
-    return credentialFactoryContract.selectCredential(account, this.state.selectCredentialPosition)
+    var checkVal;
+    try{
+      checkVal = parseInt(this.state.selectCredentialPosition,10);
+    } catch (e) {
+      console.log(e)
+      checkVal = "";
+    }
+    if (Number.isInteger(checkVal)){
+      return credentialFactoryContract.selectCredential(account, this.state.selectCredentialPosition)
       .then((result) => {
         console.log(result);
         var testVal = result.toString().split(",");
         this.setState({ selectCredentialLevel: testVal[0], selectCredentialTitle: testVal[1], selectCredentialDivision: testVal[2] })
       })
-
+    } else {
+      alert("Please enter an Integer value for Credential Lookup Position.  No lookup attempted.");
+    }
   }
   //*************************** */
   //*  Select Applicant Area   */
@@ -284,12 +321,23 @@ class App extends Component {
   selectApplicant(event) {
     const applicantFactoryContract = this.state.applicantFactoryContract
     const account = this.state.account
+    var checkVal;
+    try{
+      checkVal = parseInt(this.state.selectCredentialPosition,10);
+    } catch (e) {
+      console.log(e)
+      checkVal = "";
+    }
+    if(Number.isInteger(checkVal)){
     return applicantFactoryContract.selectApplicantByOrgAndPosition(account, this.state.selectApplicantPosition)
       .then((result) => {
         console.log(result);
         var testVal = result.toString().split(",");
         this.setState({ selectApplicantAddress: testVal[0], selectApplicantSSN: testVal[1], selectApplicantCID: testVal[2], selectApplicantFName: testVal[3], selectApplicantLName: testVal[4] })
       })
+    } else {
+      alert("Please enter an Integer value for Applicant Lookup Position.  No lookup attempted.");
+    }
   }
 
 
@@ -348,6 +396,7 @@ class App extends Component {
                         <font size="2">This is the current accounts details in relation to the blockchain.</font><br/>
                         <font color="blue">CurrentAccount isOwner: {this.state.isOwner}</font><br />
                         <font color="blue">CurrentAccount isCredentialOrg: {this.state.isCredentialOrg}</font><br />
+                        <font color="blue">CurrentAccount isApplicant: {this.state.isApplicant}</font><br />
                         <font color="blue">School ShortName: {this.state.schoolShortName}</font><br />
                         <font color="blue">School Official Name: {this.state.officialSchoolName}</font><br />
                         <font color="blue">SchoolAddress: {this.state.schoolAddress}</font><br />
