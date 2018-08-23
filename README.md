@@ -127,7 +127,7 @@ I mean does this thing REALLY work?  Try it, you too can test it.   And Well, ac
 ### CredentialOrgFactory By-Hand Tests (CredentialOrg Interaction Section)
 1. Selection of a Credential Org: The CredentialOrgFactory is prepopulated with 3 Accounts, (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Credential Org Button.  The array starts at zero, so the first array position is 0, then 1, and 2 for a total of 3 positions.
 
-2. Creation of a CredentialOrg: You can create your own credentialOrg as the owner.  Only the contract owner can acomplish this funciton.  Fill out form with valid data (form should limit max), and submit!
+2. Creation of a CredentialOrg: You can create credentialOrgs as the owner.  Only the contract owner can acomplish this function.  Fill out form with valid data (form should limit string input limits), and submit!
 
 ### CredentialFactory By-Hand Tests (CredentialFactory Section.)
 1. Selection of a Credential: The CredentialFactory is prepopulated with 4 Credentials, (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Credential Button.

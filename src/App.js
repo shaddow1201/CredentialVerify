@@ -424,7 +424,7 @@ class App extends Component {
                 </section>
                 <section>
                 <h3>Create Credential Org</h3>
-                <font size="2">You can create your own credentialOrg as the owner.  Only the contract owner can acomplish this funciton.<br/>Fill out form with valid data (form should limit max), and submit!</font>
+                <font size="2">You can create credentialOrgs as the owner.  Only the contract owner can acomplish this function.<br/>Fill out form with valid data (form should limit max), and submit!</font>
                 <table>
                   <tbody>
                     <tr><td><font color="blue">School Short Name</font></td><td><input type="text" maxLength="30" size="32" value={this.state.createCredentialOrgShortName} onChange={this.createOrgShortNameChange.bind(this)} /></td></tr>
