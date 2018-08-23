@@ -118,7 +118,7 @@ There are 22 automated tests with these contracts, and are as follows
 6. testSelectInvalidOrgApplicantCount - Checks a call to Applicant Count by a non credential org.
 
 
-I can think of many more tests (like pausable testing, and others), but beyond Unit testing and into Functional Testing.  The react site helped with my Javascript, and so i'll work on that to begin some functional tests.  Round 2 will also include  access control tightening through the use of modifiers beyond onlyOwner. Note: this is round one of likely three, before i'll be 'satisfied' with the final output.
+I can think of many more tests (like pausable testing, and others), beyond Unit testing and into Functional Testing.  The react site helped with my Javascript, and so i'll work on that to begin some functional tests.  Round 2 will also include further access control tightening through the use of modifiers beyond onlyOwner. Note: this is round one of likely three, before i'll be 'satisfied' with the final set of contracts.
 
 ## By-Hand Testing 
 
