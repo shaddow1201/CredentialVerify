@@ -8,7 +8,6 @@ A. Creation of CredentialOrgs that provide various credentials.
 B. Allows these orgs to create their own credentials or have the owner do it for them.  
 C. Retrieves applicants that have applied for credentials for that credentialling org.  
 
-
 ![Relation Image](./RelationImage.png?raw=true "Object Relations")
 
 ### This project is mainly a proof of concept, that doesn't use ether except for gas, and focuses on: 
