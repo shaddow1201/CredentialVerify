@@ -381,7 +381,7 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-          <a href="https://github.com/truffle-box/react-box" className="pure-menu-heading pure-menu-link">Based on React's Truffle Box</a>
+          <a href="https://github.com/truffle-box/react-box" className="pure-menu-heading pure-menu-link">Based on Truffle React Box</a>
           <a href="https://github.com/shaddow1201/CredentialVerify" className="pure-menu-heading pure-menu-link">GitHub Repository</a>
         </nav>
         <main className="container">
@@ -410,7 +410,7 @@ class App extends Component {
                 <h2>Credential Org Interaction Section</h2>
                 <font color="blue">Total Credential Orgs: {this.state.credentialOrgCount}</font><br />
                 <h3>Select CredentialOrg</h3>
-                <font size="2">The CredentialOrgFactory is prepopulated with 3 Accounts, (see the 2_deploy_contracts.js).<br/>Zero is prepopulated, so you can just click the Select Credential Org Button.<br/>  The array starts at zero, so the first array position is 0, then 1, and 2 for a total of 3 positions.</font><br/>
+                <font size="2">The CredentialOrgFactory is prepopulated with 3 Accounts, (see the 2_deploy_contracts.js).<br/>Zero is prepopulated, so you can just click the Select Credential Org Button.<br/>  The array starts at zero, so the first array position is 0, then 1, and 2 for a total of 3 positions.<br/>  This number limit increases as you insert records.</font><br/>
                 <section>
                   <table>
                     <tbody>
