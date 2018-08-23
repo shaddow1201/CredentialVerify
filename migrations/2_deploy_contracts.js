@@ -2,17 +2,17 @@ var SafeMath32 = artifacts.require("./SafeMath32.sol");
 var CredentialOrgFactory = artifacts.require("CredentialOrgFactory");  
 var CredentialFactory = artifacts.require("CredentialFactory");        
 var ApplicantFactory = artifacts.require("ApplicantFactory");          
-var ProcessApplicants = artifacts.require("ProcessApplicants");
+//var ProcessApplicants = artifacts.require("ProcessApplicants");
 
 module.exports = async function(deployer, accounts) {
-  let safeMathInst, aInst, bInst, cInst, dInst;
+  let safeMathInst, aInst, bInst, cInst;
 
   await Promise.all([
     deployer.deploy(SafeMath32),
     deployer.deploy(CredentialOrgFactory),
     deployer.deploy(CredentialFactory),
     deployer.deploy(ApplicantFactory),
-    deployer.deploy(ProcessApplicants),
+    //deployer.deploy(ProcessApplicants),
     deployer.link(SafeMath32,[CredentialOrgFactory,CredentialFactory,ApplicantFactory])
   ]);
 
@@ -21,13 +21,13 @@ module.exports = async function(deployer, accounts) {
     CredentialOrgFactory.deployed(),
     CredentialFactory.deployed(),
     ApplicantFactory.deployed(),
-    ProcessApplicants.deployed(),
+    //ProcessApplicants.deployed(),
   ])
 
   aInst = instances[1];
   bInst = instances[2];
   cInst = instances[3];
-  dInst = instances[4];
+  //dInst = instances[4];
 
   results = await Promise.all([
     // Generate a base record
@@ -38,7 +38,7 @@ module.exports = async function(deployer, accounts) {
     // this doesn't quite acomplish what i'm trying to get done... as modifer onlyBy(msg.sender) to allow the contract themselves to call the functions.
     aInst.createCredentialOrg("CREDENTIAL", "CREDENTIALFACTORY", bInst.address),
     aInst.createCredentialOrg("APPLICANT", "APPLICANTFACTORY", cInst.address),
-    aInst.createCredentialOrg("PROCESS", "PROCESSAPPLICANTS", dInst.address),
+    //aInst.createCredentialOrg("PROCESS", "PROCESSAPPLICANTS", dInst.address),
     
     // Set Address of bInst so it can point at aInst
     console.log("setAddress CredentialFactory: for CredentialOrgFactory"),
@@ -60,7 +60,7 @@ module.exports = async function(deployer, accounts) {
     cInst.createApplicant("0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB", "123456785", "987654325", "TESTAPPLICANT5", "TESTAPPLICANT5"),
     
     // Set Address of dInst so it can point at aInst, bInst, and cInst
-    dInst.setAddress(aInst.address, bInst.address, cInst.address)
+    //dInst.setAddress(aInst.address, bInst.address, cInst.address)
   ]);
 
 };

@@ -1,6 +1,6 @@
 # Credential Verify
 
-Credential Verify is intended to be an off-chain enterprise solution pointed at cryptographically verifying Educational Institutions awarded credentials.  This is round of of probably 3 before completed.
+Credential Verify is intended to be an off-chain enterprise solution pointed at cryptographically verifying Educational Institutions awarded credentials.  This is round of of probably 3 before completed.  This repository shows interactions from the standpoint of a credentialOrg.
 
 ## What it does
 It satisfies the following:  
@@ -16,7 +16,7 @@ C. Retrieves applicants that have applied for credentials for that credentiallin
 2. CredentialFactory.sol - allowing creation of credentials for a CredentialOrg
 3. ApplicantFactory.sol - allows Applicants to apply to CredentialOrgs.
 4. ***ProcessApplicants.sol - allows Gathering of info from CredentialOrgFactory, CredentialFactory, and Applicant Factory. 
-    This has been coded and hand tested, but will need advanced functional testing in Javascript. I am considering a different route on this, and Write Credentials may be all that is needed.
+    This has been coded and hand tested, but will need advanced functional testing in Javascript. I am considering a different route on this, and Write Credentials may be all that is needed.  
 5. ***WriteCredential.sol - allows credentials to be written and Applicant updated.   
     Considering many ideas such as tolkens that can be assigned but not transfered, once assigned.  Maybe a signed PDF or another type of document is being considered.
 
@@ -58,7 +58,6 @@ ganache-cli -port 8545 -m "delay film punch stool adult expect bulb grab clinic 
     1. change the network to Private Network, set port to: 8545
     2. This will set account[0] for you. (original credentialOrg added to contract)
     3. copy the secret key for account[1] from the ganache-cli window, and add into MetaMask, (will be added in testing)
-    4. copy the secret key for account[2] from the ganache-cli window, and add into MetaMask (will be used to show applicant variation)
 
 4. Compile truffle
 Compile the project in standard manner from the directory where the files are located.
@@ -89,8 +88,8 @@ npm run start
 
 
 ## Tests
-There are 22 tests with these contracts, and are as follows
-### CredentialOrgFactory Tests  
+There are 22 automated tests with these contracts, and are as follows
+### CredentialOrgFactory Automated Tests  
 1. testCheckContractOwner - Checks Owner address vs expected, Makes sure that the contract was deployed to the correct owner.
 2. testSelectCredentialOrgCount -Tests to see if INIT records were created upon deploy.  Data existence check.
 3. testSelectCredentialOrgTestRecord -Tests to see if INIT record values were set correctly.  Data Value correctness checking.
@@ -102,7 +101,7 @@ There are 22 tests with these contracts, and are as follows
 9. testSelectValidCredentialOrgByAddress - Test to see if credentialling org can be looked up by valid credentialling org address
 10. testSelectInvalidCredentialOrgByAddress -Test to see if invalid credentialling org can be looked up by address (blank means no return values)
 
-### CredentialFactory Tests
+### CredentialFactory Automated Tests
 1. testCheckContractOwner - Checks Owner address vs expected, Makes sure that the contract was deployed to the correct owner.
 2. testSelectValidOrgCredentialCount - Checks Valid CredentialOrg Credential Count, checks if inital conditions are correct from migration
 3. testSelectInvalidOrgCredentialCount - Checks Invalid CredentialOrg Credential Count, checks to see if return from invalid Org returns 0.
@@ -110,7 +109,7 @@ There are 22 tests with these contracts, and are as follows
 5. testInsertCredentialRecordTests to see if Credential Records can be inserted. limited to Owner atm).  A Local instance invoked to allow onlyOwner modifer to work.
 6. testSelectCredentialInsertedRecord - Tests to see if Credential Record just inserted's value was correct.   A Local instance invoked to allow onlyOwner modifer to work.
 
-### ApplicantFactory Tests
+### ApplicantFactory Automated Tests
 1. testCheckContractOwner - Checks Owner address vs expected, Makes sure that the contract was deployed to the correct owner.
 2. testCreateApplicant - Checks to see if an Applicant can be created.
 3. testSelectValidApplicantByOrgAndPosition - Checks a Valid applicant by org and position (previous test created)
@@ -120,6 +119,24 @@ There are 22 tests with these contracts, and are as follows
 
 
 I can think of many more tests beyond Unit this basic unit testing and into Functional Testing, however, my Javascript needs further work (as it was stretched for the ReactBox), before i can add some functional tests.  Round 2 will also include functional testing (Javascript), and access control tightening through the use of modifiers beyond onlyOwner. Note: this is round one of likely three, before i'll be 'satisfied' with the final output.
+
+## By-Hand Testing 
+
+I mean does this thing REALLY work?  Try it, you too can test it.   And Well, according to my testing it seems to.   I hope you have the same successful experience that I have had.  The tests below are for you to become familiar with how it works more than the automated tests.
+
+### CredentialOrgFactory By-Hand Tests (CredentialOrg Interaction Section)
+1. Selection of a Credential Org: The CredentialOrgFactory is prepopulated with 3 Accounts, (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Credential Org Button.  The array starts at zero, so the first array position is 0, then 1, and 2 for a total of 3 positions.
+
+2. Creation of a CredentialOrg: You can create your own credentialOrg as the owner.  Only the contract owner can acomplish this funciton.  Fill out form with valid data (form should limit max), and submit!
+
+### CredentialFactory By-Hand Tests (CredentialFactory Section.)
+1. Selection of a Credential: The CredentialFactory is prepopulated with 4 Credentials, (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Credential Button.
+
+2. Creation of a Credential: You can create your own credential as the owner or the credentialOrg.  The owner can add to any, the credentialOrg can only act on/add to their records.  The owner access is intended to be a helper function for the CredentialOrgs.   Fill out form with valid data (form should limit max), and submit!
+
+### ApplicantFactory By-Hand Tests (ApplicantFactory Section)
+1. Selection of an Applicant.  The ApplicantFactory is prepopulated with 5 Applicants, all applying to the owner CredentialOrg. (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Applicant Button.
+
 
 ## Built With
 
