@@ -158,6 +158,7 @@ I mean does this thing REALLY work?  Try it, you too can test it.   And Well, ac
 * [truffle react box](https://github.com/truffle-box/react-box) - used as web app base.
 * [OpenZeppelin-Solidity](https://github.com/OpenZeppelin/openzeppelin-solidity) (Pausable.sol, Ownable.sol)
 * [CryptoZombies](http://cryptozombies.io) (SafeMath32.sol, was pared from.)
+* [Ethereum StackExchange](https://ethereum.stackexchange.com/) several answered questions, and even more just found by searching.
 
 ## Author
 Richard Noordam
