@@ -48,14 +48,13 @@ module.exports = async function(deployer, accounts) {
     aInst.createCredentialOrg("APPLICANT", "APPLICANTFACTORY", cInst.address),
     //aInst.createCredentialOrg("PROCESS", "PROCESSAPPLICANTS", dInst.address),
     
-    // Set Address of bInst so it can point at aInst
+
     console.log("create a base set of credentials for testing"),
     bInst.createCredential("Credential1", "AAAA", "AAAAAA", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
     bInst.createCredential("Credential2", "BBBB", "BBBBBB", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
     bInst.createCredential("Credential3", "CCCC", "CCCCCC", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
     bInst.createCredential("Credential4", "DDDD", "DDDDDD", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
     
-    // Set Address of cInst so it can point at aInst
     console.log("insert 5 Applicant Records, for testing."),
     cInst.createApplicant("0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB", "123456781", "987654321", "TESTAPPLICANT1", "TESTAPPLICANT1"),
     cInst.createApplicant("0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB", "123456782", "987654322", "TESTAPPLICANT2", "TESTAPPLICANT2"),
