@@ -88,7 +88,7 @@ npm run start
 
 
 ## Tests
-There are 22 automated tests with these contracts, and are as follows
+There are 22 automated tests with these contracts, designed around the idea of Unit Testing, and are as follows:  
 ### CredentialOrgFactory Automated Tests  
 1. testCheckContractOwner - Checks Owner address vs expected, Makes sure that the contract was deployed to the correct owner.
 2. testSelectCredentialOrgCount -Tests to see if INIT records were created upon deploy.  Data existence check.
