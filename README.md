@@ -128,7 +128,7 @@ I mean does this thing REALLY work?  Try it, you too can test it.   And Well, ac
 1. This area just shows the current account details in relation to the blockchain.  Answering:  
 &nbsp;&nbsp;&nbsp;&nbsp;a) is Current Account the Owner?  
 &nbsp;&nbsp;&nbsp;&nbsp;b) is Current Account a CredentialOrg?  
-&nbsp;&nbsp;&nbsp;&nbsp;c) is Current Account an Applicant?
+&nbsp;&nbsp;&nbsp;&nbsp;c) is Current Account an Applicant?  
 &nbsp;&nbsp;&nbsp;&nbsp;d) Lookup of current account CredentialOrg info, ShortName, Official Name, and the blockchain address for the school.
 
 ![BaseLookup Image](./BaseLookup.png?raw=true "Base Account Lookup Information.")
