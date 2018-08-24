@@ -29,3 +29,13 @@ http://cryptozombies.io
 6. Unit Testing was chosen over Functional Testing, due to primary goal of learning the basic environment.  Version 2 will include functional testing, and further use of modifiers that will exploit the isCredentialOrg and and further limit access to CredentialFactory, and ProcessApplicants, and WriteCredential.
 
 7. Creating and Assigning non-transferable tokens is being looked at for future implimentation in WriteCredential, but were left out of this implimentation due to being beyond what i was attempting to accomplish in this project.
+
+8. Mortal - Not Used.  No Ether was involved so a mortal contract wasn't necessary. 
+
+9. Admin - Not used access isn't really a thing as Credential Orgs can only act on their own data.
+
+10. Autodepreciation - not used, not really relevant.
+
+11. State Machine - isn't really applicable, as the segmentation of data doesn't really have 'stages'.
+
+12. Speed Bump was considered, to limit Credential creation, but was deemed uncessary as credential orgs only act on their own data.
