@@ -65,10 +65,7 @@ contract ApplicantFactory is Pausable {
     * @param _credentialOrgContractAddress address of CredentialOrgFactory (set on deploy).
     */
     function setAddress(address _credentialOrgContractAddress) public onlyOwner {
-        if (msg.sender == owner){
-            credentialOrgContractAddress = _credentialOrgContractAddress;
-        }
-        cof = CredentialOrgFactory(credentialOrgContractAddress);
+        credentialOrgContractAddress = _credentialOrgContractAddress;
     }
 
     /**
