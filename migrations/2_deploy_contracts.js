@@ -24,6 +24,7 @@ module.exports = async function(deployer, accounts) {
     //ProcessApplicants.deployed(),
   ])
 
+  safeMathInst = instances[0];
   aInst = instances[1];
   bInst = instances[2];
   cInst = instances[3];
@@ -31,18 +32,23 @@ module.exports = async function(deployer, accounts) {
 
   results = await Promise.all([
     // Generate a base record
+    console.log("SafeMath32 Address: " + safeMathInst.address),
+    console.log("CredentialOrgFactory Address: " + aInst.address),
+    console.log("CredentialFactory Address: " + bInst.address),
+    console.log("ApplicantFactory Address: " + cInst.address),
+    console.log("Set Contract Needed Addresses"),
+    bInst.setAddress(aInst.address),
+    cInst.setAddress(aInst.address),
+
     console.log("StartRec Creation"),
     console.log("CredentialOrg Recs, owner, address of CredentialFactory, ApplicantFactory, and ProcessApplicants"),
     aInst.createCredentialOrg("INITRECORD", "BASE INIT RECORD", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
-    // Grant access to all contracts (for isCredentialOrg)  
-    // this doesn't quite acomplish what i'm trying to get done... as modifer onlyBy(msg.sender) to allow the contract themselves to call the functions.
+    // Grant access to contracts (for isCredentialOrg)  
     aInst.createCredentialOrg("CREDENTIAL", "CREDENTIALFACTORY", bInst.address),
     aInst.createCredentialOrg("APPLICANT", "APPLICANTFACTORY", cInst.address),
     //aInst.createCredentialOrg("PROCESS", "PROCESSAPPLICANTS", dInst.address),
     
     // Set Address of bInst so it can point at aInst
-    console.log("setAddress CredentialFactory: for CredentialOrgFactory"),
-    bInst.setAddress(aInst.address),
     console.log("create a base set of credentials for testing"),
     bInst.createCredential("Credential1", "AAAA", "AAAAAA", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
     bInst.createCredential("Credential2", "BBBB", "BBBBBB", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
@@ -50,8 +56,6 @@ module.exports = async function(deployer, accounts) {
     bInst.createCredential("Credential4", "DDDD", "DDDDDD", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
     
     // Set Address of cInst so it can point at aInst
-    console.log("setAddress ApplicantFactory: for CredentialOrgFactory"),
-    cInst.setAddress(aInst.address),
     console.log("insert 5 Applicant Records, for testing."),
     cInst.createApplicant("0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB", "123456781", "987654321", "TESTAPPLICANT1", "TESTAPPLICANT1"),
     cInst.createApplicant("0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB", "123456782", "987654322", "TESTAPPLICANT2", "TESTAPPLICANT2"),

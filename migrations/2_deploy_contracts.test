@@ -1,18 +1,18 @@
 var SafeMath32 = artifacts.require("./SafeMath32.sol");
-var ApplicantFactory = artifacts.require("CredentialFactory");          
+var CredentialOrgFactory = artifacts.require("CredentialOrgFactory");          
 
 module.exports = async function(deployer, accounts) {
   let safeMathInst, aInst;
 
   await Promise.all([
     deployer.deploy(SafeMath32),
-    deployer.deploy(CredentialFactory),
-    deployer.link(SafeMath32,CredentialFactory)
+    deployer.deploy(CredentialOrgFactory),
+    deployer.link(SafeMath32,CredentialOrgFactory)
   ]);
 
   instances = await Promise.all([
     SafeMath32.deployed(),
-    CredentialFactory.deployed()
+    CredentialOrgFactory.deployed()
   ])
 
   safeMathInst = instances[0]
@@ -20,8 +20,8 @@ module.exports = async function(deployer, accounts) {
 
   results = await Promise.all([
     //console.log("SafeMath32 Address: " +  safeMathInst.address),
-    console.log("CredentialFactory: " + aInst.address)
-    //aInst.createCredentialOrg("INITRECORD", "BASE INIT RECORD", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB"),
+    console.log("CredentialOrgFactory: " + aInst.address),
+    //aInst.createCredentialOrg("INITRECORD", "BASE INIT RECORD", "0x5a186B7FeC36909678211F69beB67EC3b1E4fFBB")
     // Grant access to all contracts (for isCredentialOrg)  
     // this doesn't quite acomplish what i'm trying to get done... as modifer onlyBy(msg.sender) to allow the contract themselves to call the functions.
     //aInst.createCredentialOrg("CREDENTIAL", "CREDENTIALFACTORY", bInst.address),
