@@ -57,7 +57,6 @@ ganache-cli --port 8545 --mnemonic "delay film punch stool adult expect bulb gra
     import with seed phrase "delay film punch stool adult expect bulb grab clinic lawsuit clown amused"
     1. change the network to Private Network, set port to: 8545
     2. This will set account[0] for you. (original credentialOrg added to contract)
-    3. copy the secret key for account[1] from the ganache-cli window, and add into MetaMask, (will be added in testing)
 
 4. Compile truffle
 Compile the project in standard manner from the directory where the files are located.
