@@ -1,0 +1,39 @@
+var SafeMath32 = artifacts.require("./SafeMath32.sol");
+var CredentialOrgFactory = artifacts.require("CredentialOrgFactory");  
+var CredentialFactory = artifacts.require("CredentialFactory");        
+//var ApplicantFactory = artifacts.require("ApplicantFactory");          
+//var ProcessApplicants = artifacts.require("ProcessApplicants");
+
+module.exports = async function(deployer, accounts) {
+  let safeMathInst, aInst, bInst, cInst;
+
+  await Promise.all([
+    deployer.deploy(SafeMath32),
+    deployer.deploy(CredentialOrgFactory),
+    deployer.deploy(CredentialFactory),
+//    deployer.deploy(ApplicantFactory),
+    //deployer.deploy(ProcessApplicants),
+    deployer.link(SafeMath32,[CredentialOrgFactory,CredentialFactory])
+  ]);
+
+  instances = await Promise.all([
+    SafeMath32.deployed(),
+    CredentialOrgFactory.deployed(),
+    CredentialFactory.deployed(),
+    //ApplicantFactory.deployed(),
+    //ProcessApplicants.deployed(),
+  ])
+
+  SafeMathInst = instances[0];
+  aInst = instances[1];
+  bInst = instances[2];
+  //cInst = instances[3];
+  //dInst = instances[4];
+
+  results = await Promise.all([
+    console.log("SafeMath32 for CredentialOrgFactory and CredentialFactory: " + SafeMathInst.address),
+    console.log("CredentialOrgFactory Address: " + aInst.address),
+    console.log("CredentialOrgFactory Address: " + bInst.address)
+  ]);
+
+};

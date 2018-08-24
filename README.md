@@ -124,19 +124,33 @@ I can think of many more tests (like pausable testing, and others), beyond Unit 
 
 I mean does this thing REALLY work?  Try it, you too can test it.   And Well, according to my testing it seems to.   I hope you have the same successful experience that I have had.  The tests below are for you to become familiar with how it works more than the automated tests.
 
+### Base Lookup - Current Account Details
+1. This area just shows the current account details in relation to the blockchain.  Answering:  
+&nbsp;&nbsp;&nbsp;&nbsp;a) is Current Account the Owner?  
+&nbsp;&nbsp;&nbsp;&nbsp;b) is Current Account a CredentialOrg?  
+&nbsp;&nbsp;&nbsp;&nbsp;c) is Current Account an Applicant?
+&nbsp;&nbsp;&nbsp;&nbsp;d) Lookup of current account CredentialOrg info, ShortName, Official Name, and the blockchain address for the school.
+
+![BaseLookup Image](./BaseLookup.png?raw=true "Base Account Lookup Information.")
+
 ### CredentialOrgFactory By-Hand Tests (CredentialOrg Interaction Section)
 1. Selection of a Credential Org: The CredentialOrgFactory is prepopulated with 3 Accounts, (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Credential Org Button.  The array starts at zero, so the first array position is 0, then 1, and 2 for a total of 3 positions.
 
 2. Creation of a CredentialOrg: You can create credentialOrgs as the owner.  Only the contract owner can acomplish this function.  Fill out form with valid data (form should limit string input limits), and submit!
+
+![CredentialOrg Image](./CredentialOrgSection.png?raw=true "Credential Org Interaction Area.")
 
 ### CredentialFactory By-Hand Tests (CredentialFactory Section.)
 1. Selection of a Credential: The CredentialFactory is prepopulated with 4 Credentials, (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Credential Button.
 
 2. Creation of a Credential: You can create your own credential as the owner or the credentialOrg.  The owner can add to any, the credentialOrg can only act on/add to their records.  The owner access is intended to be a helper function for the CredentialOrgs.   Fill out form with valid data (form should limit max), and submit!
 
+![Credential Image](./CredentialSection.png?raw=true "Credential Interaction Area.")
+
 ### ApplicantFactory By-Hand Tests (ApplicantFactory Section)
 1. Selection of an Applicant.  The ApplicantFactory is prepopulated with 5 Applicants, all applying to the owner CredentialOrg. (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Applicant Button.
 
+![Applicant Image](./ApplicantSection.png?raw=true "Applicant Interaction Area.")
 
 ## Built With
 
