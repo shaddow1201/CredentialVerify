@@ -19,6 +19,9 @@ C. Retrieves applicants that have applied for credentials for that credentiallin
     This has been coded and hand tested, but will need advanced functional testing in Javascript. I am considering a different route on this, and Write Credentials may be all that is needed.  
 5. ***WriteCredential.sol - allows credentials to be written and Applicant updated.   
     Considering many ideas such as tolkens that can be assigned but not transfered, once assigned.  Maybe a signed PDF or another type of document is being considered.
+6. Pausable.sol - Allowing an emergency stop pattern. (OpenZeppelin)
+7. Ownable.sol - Allowing transfer of ownership (OpenZeppelin)
+8. SafeMath32.sol - uint32 safemath library, thus not allowing overflows in CredentialOrgFactory, CredentialFactory and ApplicantFactory.
 
 *** future implimentation
 
