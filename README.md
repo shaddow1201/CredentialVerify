@@ -82,7 +82,7 @@ truffle test
 ```
 
 5. Run Development Web Server for project.
-Run the following command in the directory where you compiled the package from.
+Run the following command in the directory where you compiled the package from
 
 ```
 npm run start
@@ -154,7 +154,7 @@ I mean does this thing REALLY work?  Try it, you too can test it.   And Well, ac
 
 ![Applicant Image](./ApplicantSection.png?raw=true "Applicant Interaction Area.")
 
-### Rinkeby Testnet Installed Addresses
+### Rinkeby Testnet Installed Addresses - deployed through REMIX.
 CredentialOrgFactory - 0xcabdec7d9a45ce5d029d1d37318f7e79e85a19e4  
 CredentialFactory - 0xcd7bda84010a81c0294b402d36e412f086e9ea8e  
 ApplicantFactory - 0x59be9e4689462e743b668edc094149056c029ecb  
