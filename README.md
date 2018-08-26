@@ -120,7 +120,7 @@ There are 22 automated tests with these contracts, designed around the idea of U
 6. testSelectInvalidOrgApplicantCount - Checks a call to Applicant Count by a non credential org.
 
 
-I can think of many more tests (like pausable testing, and others), beyond Unit testing and into Functional Testing.  The react site helped with my Javascript, and so i'll work on that to begin some functional tests.  Round 2 will also include further access control tightening through the use of modifiers beyond onlyOwner. Note: this is round one of likely three, before i'll be 'satisfied' with the final set of contracts.
+I can think of many more tests (like pausable testing, and others), beyond Unit testing and into Functional Testing. As to functional testing, I spent several hours testing in Remix. The react site helped with my Javascript, and so i'll take what i learned on that and begin some functional tests.  Further work will include further access control tightening through the use of modifiers beyond onlyOwner. 
 
 ## By-Hand Testing 
 
@@ -153,6 +153,11 @@ I mean does this thing REALLY work?  Try it, you too can test it.   And Well, ac
 1. Selection of an Applicant.  The ApplicantFactory is prepopulated with 5 Applicants, all applying to the owner CredentialOrg. (see the 2_deploy_contracts.js). Zero is prepopulated, so you can just click the Select Applicant Button.
 
 ![Applicant Image](./ApplicantSection.png?raw=true "Applicant Interaction Area.")
+
+### Rinkeby Testnet Installed Addresses
+CredentialOrgFactory - 0xcabdec7d9a45ce5d029d1d37318f7e79e85a19e4
+CredentialFactory - 0xcd7bda84010a81c0294b402d36e412f086e9ea8e
+ApplicantFactory - 0x59be9e4689462e743b668edc094149056c029ecb
 
 ## Built With
 

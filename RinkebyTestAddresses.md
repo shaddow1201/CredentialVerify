@@ -1,0 +1,6 @@
+### Rinkeby Testnet Installed Addresses
+CredentialOrgFactory - 0xcabdec7d9a45ce5d029d1d37318f7e79e85a19e4
+CredentialFactory - 0xcd7bda84010a81c0294b402d36e412f086e9ea8e
+ApplicantFactory - 0x59be9e4689462e743b668edc094149056c029ecb
+
+Test addresses have less data in them than the local versions.
